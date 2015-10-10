@@ -137,7 +137,7 @@ void initialize();
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl();
-void drive(int vx, int vy, int rotation, Gyro gyro);
+void drive(int vx, int vy, int rotation, bool field_centric);
 
 // From lfilter.c
 void lfilterInit(const int channel, int num_fcycles);

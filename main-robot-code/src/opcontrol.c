@@ -40,17 +40,17 @@ const int ROTATION_AXIS = 1;	// ideal type: uint8_t
 const int JOYSTICK_SLOT = 1;	// ideal type: uint8_t
 const int ROTATION_DIVIDER = 2;	// ideal type: uint8_t
 
-void drive(int/*int8_t*/ vx, int/*int8_t*/ vy, int/*int8_t*/ rotation, Gyro gyro) {
+void drive(int/*int8_t*/ vx, int/*int8_t*/ vy, int/*int8_t*/ rotation, bool is_field_centric) {
 	int/*int16_t*/ flspeed, blspeed, frspeed, brspeed;
 
-	if (gyro != NULL) {
+	if (is_field_centric) {	// TODO: test
 		float angle = (float) gyroGet(gyro) * M_PI / 180;
 		float v = hypotf(vx, vy);
 		vx = (int) (v * sinf(angle));
 		vy = (int) (v * cosf(angle));
 	}
 
-	// TODO: signs might need changing
+	// TODO: test
 	flspeed = getfSpeed(FRONT_LEFT_MOTOR_CHANNEL, -vy - vx + rotation);
 	blspeed = getfSpeed(BACK_LEFT_MOTOR_CHANNEL, -vy + vx + rotation);
 	frspeed = getfSpeed(FRONT_RIGHT_MOTOR_CHANNEL, vy - vx + rotation);
@@ -91,7 +91,7 @@ void operatorControl() {
 		drive(joystickGetAnalog(JOYSTICK_SLOT, STRAFE_AXIS),
 		   	  joystickGetAnalog(JOYSTICK_SLOT, DRIVE_AXIS),
 			  joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS) / ROTATION_DIVIDER,
-			  NULL);
+			  true);
 
 		delay(20);
 	}
