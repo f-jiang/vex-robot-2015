@@ -10,6 +10,8 @@ int fcycles[MOTOR_LIMIT] = { 0 };								// ideal type: uint8_t
 int count = 0;													// ideal type: uint8_t
 
 /**
+ * TODO: test with lfilters on only some channels
+ *
  * Initializes the linear filter for the specified motor channel. A motor channel cannot be
  * initialized more than once.
  *
@@ -34,6 +36,8 @@ void lfilterInit(const int/*uint8_t*/ channel, int/*uint8_t*/ num_fcycles) {
 }
 
 /**
+ * TODO: test different number of cycles on each channel
+ *
  * Takes in a speed value for a specified channel and calculates a filtered speed. If the
  * channel hasn't been initialized, a speed of 0 will be returned.
  *
