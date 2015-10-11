@@ -37,29 +37,46 @@
 const int DRIVE_AXIS = 3;		// ideal type: uint8_t
 const int STRAFE_AXIS = 4;		// ideal type: uint8_t
 const int ROTATION_AXIS = 1;	// ideal type: uint8_t
+
 const int JOYSTICK_SLOT = 1;	// ideal type: uint8_t
 const int ROTATION_DIVIDER = 2;	// ideal type: uint8_t
 
+/**
+ * TODO: test field-centric drive
+ * TODO: see if signs need to be changed
+ *
+ * Drives and/or rotates the robot at the specified speed. The direction is determined from the
+ * hypotenuse of vx and vy (see "Parameters" for their definitions).
+ *
+ * Because the robot has a holonomic drive, it is capable of traversing at any angle regardless
+ * of its orientation.
+ *
+ * This function only applies one pulse to the drive motors and should be called from within a
+ * loop.
+ *
+ * Parameters:
+ * vx - the horizontal speed of the robot; -127 for full left, 127 for full right
+ * vy - the vertical speed of the robot; -127 for full down, 127 for full up
+ * r  - the rotational speed of the robot; -127 for full counterclockwise, 127 for full clockwise
+ * is_field_centric - if set to true, the direction of the robot's motion will be relative to the
+ * 					  playing field rather than the robot
+ */
 void drive(int/*int8_t*/ vx, int/*int8_t*/ vy, int/*int8_t*/ rotation, bool is_field_centric) {
 	int/*int16_t*/ flspeed, blspeed, frspeed, brspeed;
 
-	if (is_field_centric) {	// TODO: test
+	if (is_field_centric) {
 		float angle = (float) gyroGet(gyro) * M_PI / 180;
 		float v = hypotf(vx, vy);
 		vx = (int) (v * sinf(angle));
 		vy = (int) (v * cosf(angle));
 	}
 
-	// TODO: test
+	// Linear filtering for gradual acceleration and reduced motor wear
 	flspeed = getfSpeed(FRONT_LEFT_MOTOR_CHANNEL, -vy - vx + rotation);
 	blspeed = getfSpeed(BACK_LEFT_MOTOR_CHANNEL, -vy + vx + rotation);
 	frspeed = getfSpeed(FRONT_RIGHT_MOTOR_CHANNEL, vy - vx + rotation);
 	brspeed = getfSpeed(BACK_RIGHT_MOTOR_CHANNEL, vy + vx + rotation);
 
-	/* assumptions: for STRAFE_AXIS, 127 = full right
-	 * 				for DRIVE_AXIS, 127 = full forward
-	 * 				for ROTATION_AXIS, 127 = full clockwise
-	 */
 	motorSet(FRONT_LEFT_MOTOR_CHANNEL, flspeed);
 	motorSet(BACK_LEFT_MOTOR_CHANNEL, blspeed);
 	motorSet(FRONT_RIGHT_MOTOR_CHANNEL, frspeed);
