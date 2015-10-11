@@ -101,7 +101,7 @@ void drive(int/*int8_t*/ vx, int/*int8_t*/ vy, int/*int8_t*/ rotation, bool is_f
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl() {
-	lfilterReset();
+	lfilterClear();
 
 	//important note: 20:3 gear ratio (for drive motor?)
 	while (true) {

@@ -77,7 +77,7 @@ int/*int8_t*/ getfSpeed(const int/*uint8_t*/ channel, int/*int16_t*/ speed) {
 /**
  * Clears the linear filter for each motor channel.
  */
-void lfilterReset(void) {
+void lfilterClear(void) {
 	for (ch = 0; ch < MOTOR_LIMIT; ++ch) {
 		for (cy = 0; cy < fcycles[ch]; ++cy) {
 			data[ch][cy] = 0;

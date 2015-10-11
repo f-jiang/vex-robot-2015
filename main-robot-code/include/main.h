@@ -142,7 +142,7 @@ void drive(int vx, int vy, int rotation, bool is_field_centric);
 // From lfilter.c
 void lfilterInit(const int channel, int num_fcycles);
 int getfSpeed(const int channel, int speed);
-void lfilterReset(void);
+void lfilterClear(void);
 
 // End C++ export structure
 #ifdef __cplusplus
