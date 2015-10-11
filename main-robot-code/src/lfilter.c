@@ -24,7 +24,7 @@ void lfilterInit(const int/*uint8_t*/ channel, int/*uint8_t*/ num_fcycles) {
 			&& chindex[channel - 1] == -1) {
 		if (num_fcycles > FILTER_CYCLE_LIMIT) {
 			num_fcycles = FILTER_CYCLE_LIMIT;
-		} else if (num_fcycles <= 0) {
+		} else if (num_fcycles < 1) {
 			num_fcycles = 1;
 		}
 
