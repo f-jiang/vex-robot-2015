@@ -34,12 +34,13 @@
 
 #include "main.h"
 
-const int DRIVE_AXIS = 3;		// ideal type: uint8_t
-const int STRAFE_AXIS = 4;		// ideal type: uint8_t
-const int ROTATION_AXIS = 1;	// ideal type: uint8_t
+const int8_t DRIVE_AXIS = 3;
+const int8_t STRAFE_AXIS = 4;
+const int8_t ROTATION_AXIS = 1;
 
-const int JOYSTICK_SLOT = 1;	// ideal type: uint8_t
-const int ROTATION_DIVIDER = 2;	// ideal type: uint8_t
+const int8_t JOYSTICK_SLOT = 1;
+
+const int8_t ROTATION_DIVIDER = 2;
 
 /**
  * TODO: test field-centric drive
@@ -61,14 +62,14 @@ const int ROTATION_DIVIDER = 2;	// ideal type: uint8_t
  * is_field_centric - if set to true, the direction of the robot's motion will be relative to the
  * 					  playing field rather than the robot
  */
-void drive(int/*int8_t*/ vx, int/*int8_t*/ vy, int/*int8_t*/ rotation, bool is_field_centric) {
-	int/*int16_t*/ flspeed, blspeed, frspeed, brspeed;
+void drive(int8_t vx, int8_t vy, int8_t rotation, bool is_field_centric) {
+	int8_t flspeed, blspeed, frspeed, brspeed;
 
 	if (is_field_centric) {
-		float angle = (float) gyroGet(gyro) * M_PI / 180;
+		float angle = gyroGet(gyro) % 360 * M_PI / 180;
 		float v = hypotf(vx, vy);
-		vx = (int) (v * sinf(angle));
-		vy = (int) (v * cosf(angle));
+		vx = (int8_t) (v * sinf(angle));
+		vy = (int8_t) (v * cosf(angle));
 	}
 
 	// Linear filtering for gradual acceleration and reduced motor wear

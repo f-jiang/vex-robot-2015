@@ -3,11 +3,11 @@
 #define MOTOR_LIMIT 12
 #define FILTER_CYCLE_LIMIT 10
 
-int ch, cy;														// ideal type: int8_t
-int data[MOTOR_LIMIT][FILTER_CYCLE_LIMIT] = { { 0 } };			// ideal type: int8_t
-int chindex[MOTOR_LIMIT] = { [0 ... MOTOR_LIMIT - 1] = -1 };	// ideal type: int8_t
-int fcycles[MOTOR_LIMIT] = { 0 };								// ideal type: uint8_t
-int count = 0;													// ideal type: uint8_t
+int8_t ch, cy;
+int8_t data[MOTOR_LIMIT][FILTER_CYCLE_LIMIT] = { { 0 } };
+int8_t chindex[MOTOR_LIMIT] = { [0 ... MOTOR_LIMIT - 1] = -1 };
+int8_t fcycles[MOTOR_LIMIT] = { 0 };
+int8_t count = 0;
 
 /**
  * TODO: test with lfilters on only some channels
@@ -20,7 +20,7 @@ int count = 0;													// ideal type: uint8_t
  * num_fcycles - the duration of the filtering effect; a higher value will result in a more
  * 				 gradual acceleration
  */
-void lfilterInit(const int/*uint8_t*/ channel, int/*uint8_t*/ num_fcycles) {
+void lfilterInit(const int8_t channel, int8_t num_fcycles) {
 	if (channel > 0 && channel <= MOTOR_LIMIT
 			&& count < MOTOR_LIMIT
 			&& chindex[channel - 1] == -1) {
@@ -56,11 +56,12 @@ void lfilterInit(const int/*uint8_t*/ channel, int/*uint8_t*/ num_fcycles) {
  *
  * Returns: a filtered speed value between -127 and 127
  */
-int/*int8_t*/ getfSpeed(const int/*uint8_t*/ channel, int/*int16_t*/ speed) {
-	int fspeed = 0;
-	ch = chindex[channel - 1];
+int8_t getfSpeed(const int8_t channel, int16_t speed) {
+	int16_t fspeed = 0;
 
-	if (ch != -1) {
+	if (channel > 0 && channel <= MOTOR_LIMIT && chindex[channel - 1] != -1) {
+		ch = chindex[channel - 1];
+
 		if (speed > INT8_MAX) {	// when calling motorSet, the speed must be between -127 and 127
 			speed = INT8_MAX;
 		} else if (speed < INT8_MIN) {
@@ -68,14 +69,14 @@ int/*int8_t*/ getfSpeed(const int/*uint8_t*/ channel, int/*int16_t*/ speed) {
 		}
 
 		for (cy = fcycles[ch] - 1; cy > -1; --cy) {
-			data[ch][cy] = (cy == 0) ? speed : data[ch][cy - 1];
+			data[ch][cy] = (cy == 0) ? (int8_t) speed : data[ch][cy - 1];
 			fspeed += data[ch][cy];
 		}
 
 		fspeed /= fcycles[ch];
 	}
 
-	return fspeed;
+	return (int8_t) fspeed;
 }
 
 /**

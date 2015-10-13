@@ -34,15 +34,15 @@
 
 #include "main.h"
 
-const int DRIVE_NUM_FILTER_CYCLES = 7;	// ideal type: uint8_t
+const int8_t DRIVE_NUM_FILTER_CYCLES = 7;
 
-const int FRONT_LEFT_MOTOR_CHANNEL = 2;	// ideal type: uint8_t
-const int FRONT_RIGHT_MOTOR_CHANNEL = 3;// ideal type: uint8_t
-const int BACK_LEFT_MOTOR_CHANNEL = 4;	// ideal type: uint8_t
-const int BACK_RIGHT_MOTOR_CHANNEL = 5;	// ideal type: uint8_t
+const int8_t FRONT_LEFT_MOTOR_CHANNEL = 2;
+const int8_t FRONT_RIGHT_MOTOR_CHANNEL = 3;
+const int8_t BACK_LEFT_MOTOR_CHANNEL = 4;
+const int8_t BACK_RIGHT_MOTOR_CHANNEL = 5;
 
-const int GYRO_PORT = 1;				// ideal type: uint8_t
-const int GYRO_MULTIPLIER = 0;			// ideal type: int8_t
+const int8_t GYRO_PORT = 1;
+const int8_t GYRO_MULTIPLIER = 0;
 
 Gyro gyro;
 

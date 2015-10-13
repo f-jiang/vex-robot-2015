@@ -53,28 +53,28 @@
 extern "C" {
 #endif
 
-// A function prototype looks exactly like its declaration, but with a semicolon instead of
-// actual code. If a function does not match a prototype, compile errors will occur.
-
-// Prototypes for initialization, operator control and autonomous
-
 // From init.c
-extern const int FRONT_LEFT_MOTOR_CHANNEL;// = 2;
-extern const int FRONT_RIGHT_MOTOR_CHANNEL;// = 3;
-extern const int BACK_LEFT_MOTOR_CHANNEL;// = 4;
-extern const int BACK_RIGHT_MOTOR_CHANNEL;// = 5;
+extern const int8_t FRONT_LEFT_MOTOR_CHANNEL;// = 2;
+extern const int8_t FRONT_RIGHT_MOTOR_CHANNEL;// = 3;
+extern const int8_t BACK_LEFT_MOTOR_CHANNEL;// = 4;
+extern const int8_t BACK_RIGHT_MOTOR_CHANNEL;// = 5;
 
-extern const int GYRO_PORT;// = 1;
-extern const int GYRO_MULTIPLIER;// = 0;
+extern const int8_t GYRO_PORT;// = 1;
+extern const int8_t GYRO_MULTIPLIER;// = 0;
 
 extern Gyro gyro;
 
 // From opcontrol.c
-extern const int DRIVE_AXIS;// = 3;
-extern const int STRAFE_AXIS;// = 4;
-extern const int ROTATION_AXIS;// = 1;
-extern const int JOYSTICK_SLOT;// = 1;
-extern const int ROTATION_DIVIDER;// = 2;
+extern const int8_t DRIVE_AXIS;// = 3;
+extern const int8_t STRAFE_AXIS;// = 4;
+extern const int8_t ROTATION_AXIS;// = 1;
+extern const int8_t JOYSTICK_SLOT;// = 1;
+extern const int8_t ROTATION_DIVIDER;// = 2;
+
+// A function prototype looks exactly like its declaration, but with a semicolon instead of
+// actual code. If a function does not match a prototype, compile errors will occur.
+
+// Prototypes for initialization, operator control and autonomous
 
 // From auto.c
 /**
@@ -137,11 +137,11 @@ void initialize();
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl();
-void drive(int vx, int vy, int rotation, bool is_field_centric);
+void drive(int8_t vx, int8_t vy, int8_t rotation, bool is_field_centric);
 
 // From lfilter.c
-void lfilterInit(const int channel, int num_fcycles);
-int getfSpeed(const int channel, int speed);
+void lfilterInit(const int8_t channel, int8_t num_fcycles);
+int8_t getfSpeed(const int8_t channel, int16_t speed);
 void lfilterClear(void);
 
 // End C++ export structure
