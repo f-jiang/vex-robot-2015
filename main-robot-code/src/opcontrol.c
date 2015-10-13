@@ -40,8 +40,6 @@ const int8_t ROTATION_AXIS = 1;
 
 const int8_t JOYSTICK_SLOT = 1;
 
-const int8_t ROTATION_DIVIDER = 2;
-
 /**
  * TODO: test field-centric drive
  * TODO: see if signs need to be changed
@@ -64,6 +62,7 @@ const int8_t ROTATION_DIVIDER = 2;
  */
 void drive(int8_t vx, int8_t vy, int8_t rotation, bool is_field_centric) {
 	int8_t flspeed, blspeed, frspeed, brspeed;
+	rotation /= 2;
 
 	if (is_field_centric) {
 		float angle = gyroGet(gyro) % 360 * M_PI / 180;
@@ -108,7 +107,7 @@ void operatorControl() {
 	while (true) {
 		drive(joystickGetAnalog(JOYSTICK_SLOT, STRAFE_AXIS),
 		   	  joystickGetAnalog(JOYSTICK_SLOT, DRIVE_AXIS),
-			  joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS) / ROTATION_DIVIDER,
+			  joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS),
 			  false);
 
 		delay(20);

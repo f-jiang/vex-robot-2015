@@ -69,7 +69,6 @@ extern const int8_t DRIVE_AXIS;// = 3;
 extern const int8_t STRAFE_AXIS;// = 4;
 extern const int8_t ROTATION_AXIS;// = 1;
 extern const int8_t JOYSTICK_SLOT;// = 1;
-extern const int8_t ROTATION_DIVIDER;// = 2;
 
 // A function prototype looks exactly like its declaration, but with a semicolon instead of
 // actual code. If a function does not match a prototype, compile errors will occur.
