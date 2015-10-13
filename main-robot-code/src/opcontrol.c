@@ -109,7 +109,7 @@ void operatorControl() {
 		drive(joystickGetAnalog(JOYSTICK_SLOT, STRAFE_AXIS),
 		   	  joystickGetAnalog(JOYSTICK_SLOT, DRIVE_AXIS),
 			  joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS) / ROTATION_DIVIDER,
-			  true);
+			  false);
 
 		delay(20);
 	}
