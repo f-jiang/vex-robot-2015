@@ -42,6 +42,7 @@ const int8_t DRIVE_BUTTON_GROUP = 7;
 const int8_t JOYSTICK_SLOT = 1;
 
 const int8_t WALKING_SPEED = 40;
+const int8_t DIAGONAL_DRIVE_THRESHOLD = 10;
 
 /**
  * TODO: test field-centric drive
@@ -108,14 +109,15 @@ void operatorControl() {
 
 	//lfilterClear();
 
-	//important note: 20:3 gear ratio (for drive motor?)
 	while (true) {
 		xspeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, STRAFE_AXIS);
 		yspeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, DRIVE_AXIS);
 		rotation = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS);
 
-		//TODO: adjust WALKING_SPEED signs as necessary
+		// Uses button-based drive controls if joysticks aren't being used
 		if (xspeed == 0 && yspeed == 0 && rotation == 0) {
+			//TODO: adjust WALKING_SPEED signs as necessary
+			//TODO: adjust WALKING_SPEED value as necessary
 			if (joystickGetDigital(JOYSTICK_SLOT, DRIVE_BUTTON_GROUP, JOY_UP)) {
 				yspeed = WALKING_SPEED;
 			} else if (joystickGetDigital(JOYSTICK_SLOT, DRIVE_BUTTON_GROUP, JOY_DOWN)) {
@@ -126,6 +128,16 @@ void operatorControl() {
 				xspeed = -WALKING_SPEED;
 			} else if (joystickGetDigital(JOYSTICK_SLOT, DRIVE_BUTTON_GROUP, JOY_RIGHT)) {
 				xspeed = WALKING_SPEED;
+			}
+		// To allow for straight movement, xspeed and yspeed are set to 0 if their values are
+		// negligibly small.
+		} else {
+			if (abs(yspeed) < DIAGONAL_DRIVE_THRESHOLD) {
+				yspeed = 0;
+			}
+
+			if (abs(xspeed) < DIAGONAL_DRIVE_THRESHOLD) {
+				xspeed = 0;
 			}
 		}
 
