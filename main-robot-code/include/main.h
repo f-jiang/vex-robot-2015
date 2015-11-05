@@ -68,7 +68,10 @@ extern Gyro gyro;
 extern const int8_t DRIVE_AXIS;// = 3;
 extern const int8_t STRAFE_AXIS;// = 4;
 extern const int8_t ROTATION_AXIS;// = 1;
+extern const int8_t DRIVE_BUTTON_GROUP;// = 7;
 extern const int8_t JOYSTICK_SLOT;// = 1;
+
+extern const int8_t WALKING_SPEED;// = 40;
 
 // A function prototype looks exactly like its declaration, but with a semicolon instead of
 // actual code. If a function does not match a prototype, compile errors will occur.
@@ -136,7 +139,7 @@ void initialize();
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl();
-void drive(int8_t vx, int8_t vy, int8_t rotation, bool is_field_centric);
+void drive(int8_t vx, int8_t vy, int8_t r, bool is_field_centric);
 
 // From lfilter.c
 void lfilterInit(const int8_t channel, int8_t num_fcycles);

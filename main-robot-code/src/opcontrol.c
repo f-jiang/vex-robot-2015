@@ -37,8 +37,11 @@
 const int8_t DRIVE_AXIS = 3;
 const int8_t STRAFE_AXIS = 4;
 const int8_t ROTATION_AXIS = 1;
+const int8_t DRIVE_BUTTON_GROUP = 7;
 
 const int8_t JOYSTICK_SLOT = 1;
+
+const int8_t WALKING_SPEED = 40;
 
 /**
  * TODO: test field-centric drive
@@ -60,9 +63,9 @@ const int8_t JOYSTICK_SLOT = 1;
  * is_field_centric - if set to true, the direction of the robot's motion will be relative to the
  * 					  playing field rather than the robot
  */
-void drive(int8_t vx, int8_t vy, int8_t rotation, bool is_field_centric) {
+void drive(int8_t vx, int8_t vy, int8_t r, bool is_field_centric) {
 	int8_t flspeed, blspeed, frspeed, brspeed;
-	rotation /= 2;
+	r /= 2;
 
 	if (is_field_centric) {
 		float angle = gyroGet(gyro) % 360 * M_PI / 180;
@@ -72,10 +75,10 @@ void drive(int8_t vx, int8_t vy, int8_t rotation, bool is_field_centric) {
 	}
 
 	// Linear filtering for gradual acceleration and reduced motor wear
-	flspeed = getfSpeed(FRONT_LEFT_MOTOR_CHANNEL, -vy - vx + rotation);
-	blspeed = getfSpeed(BACK_LEFT_MOTOR_CHANNEL, -vy + vx + rotation);
-	frspeed = getfSpeed(FRONT_RIGHT_MOTOR_CHANNEL, vy - vx + rotation);
-	brspeed = getfSpeed(BACK_RIGHT_MOTOR_CHANNEL, vy + vx + rotation);
+	flspeed = getfSpeed(FRONT_LEFT_MOTOR_CHANNEL, -vy - vx + r);
+	blspeed = getfSpeed(BACK_LEFT_MOTOR_CHANNEL, -vy + vx + r);
+	frspeed = getfSpeed(FRONT_RIGHT_MOTOR_CHANNEL, vy - vx + r);
+	brspeed = getfSpeed(BACK_RIGHT_MOTOR_CHANNEL, vy + vx + r);
 
 	motorSet(FRONT_LEFT_MOTOR_CHANNEL, flspeed);
 	motorSet(BACK_LEFT_MOTOR_CHANNEL, blspeed);
@@ -101,14 +104,32 @@ void drive(int8_t vx, int8_t vy, int8_t rotation, bool is_field_centric) {
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl() {
+	int8_t xspeed, yspeed, rotation;
+
 	//lfilterClear();
 
 	//important note: 20:3 gear ratio (for drive motor?)
 	while (true) {
-		drive(joystickGetAnalog(JOYSTICK_SLOT, STRAFE_AXIS),
-		   	  joystickGetAnalog(JOYSTICK_SLOT, DRIVE_AXIS),
-			  joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS),
-			  false);
+		xspeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, STRAFE_AXIS);
+		yspeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, DRIVE_AXIS);
+		rotation = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS);
+
+		//TODO: adjust WALKING_SPEED signs as necessary
+		if (xspeed == 0 && yspeed == 0 && rotation == 0) {
+			if (joystickGetDigital(JOYSTICK_SLOT, DRIVE_BUTTON_GROUP, JOY_UP)) {
+				yspeed = WALKING_SPEED;
+			} else if (joystickGetDigital(JOYSTICK_SLOT, DRIVE_BUTTON_GROUP, JOY_DOWN)) {
+				yspeed = -WALKING_SPEED;
+			}
+
+			if (joystickGetDigital(JOYSTICK_SLOT, DRIVE_BUTTON_GROUP, JOY_LEFT)) {
+				xspeed = -WALKING_SPEED;
+			} else if (joystickGetDigital(JOYSTICK_SLOT, DRIVE_BUTTON_GROUP, JOY_RIGHT)) {
+				xspeed = WALKING_SPEED;
+			}
+		}
+
+		drive(xspeed, yspeed, rotation, false);
 
 		delay(20);
 	}
