@@ -34,7 +34,7 @@
 
 #include "main.h"
 
-const int8_t DRIVE_NUM_FILTER_CYCLES = 7;
+const int8_t DRIVE_NUM_FILTER_CYCLES = 12;
 
 const int8_t FRONT_LEFT_MOTOR_CHANNEL = 2;
 const int8_t FRONT_RIGHT_MOTOR_CHANNEL = 3;
