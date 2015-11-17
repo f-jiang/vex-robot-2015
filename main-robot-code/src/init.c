@@ -41,10 +41,10 @@ const int8_t FRONT_RIGHT_MOTOR_CHANNEL = 3;
 const int8_t BACK_LEFT_MOTOR_CHANNEL = 4;
 const int8_t BACK_RIGHT_MOTOR_CHANNEL = 5;
 
-//const int8_t GYRO_PORT = 1;
-//const int8_t GYRO_MULTIPLIER = 0;
+const int8_t GYRO_PORT = 1;
+const int8_t GYRO_MULTIPLIER = 0;
 
-//Gyro gyro;
+Gyro gyro;
 
 /*
  * Runs pre-initialization code. This function will be started in kernel mode one time while the
@@ -71,7 +71,7 @@ void initializeIO() {
  * can be implemented in this task if desired.
  */
 void initialize() {
-//	gyro = gyroInit(GYRO_PORT, GYRO_MULTIPLIER);
+	gyro = gyroInit(GYRO_PORT, GYRO_MULTIPLIER);
 
 	lfilterInit(FRONT_LEFT_MOTOR_CHANNEL, DRIVE_NUM_FILTER_CYCLES);
 	lfilterInit(FRONT_RIGHT_MOTOR_CHANNEL, DRIVE_NUM_FILTER_CYCLES);

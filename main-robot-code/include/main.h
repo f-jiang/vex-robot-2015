@@ -63,10 +63,10 @@ extern const int8_t FRONT_RIGHT_MOTOR_CHANNEL;// = 3;
 extern const int8_t BACK_LEFT_MOTOR_CHANNEL;// = 4;
 extern const int8_t BACK_RIGHT_MOTOR_CHANNEL;// = 5;
 
-//extern const int8_t GYRO_PORT;// = 1;
-//extern const int8_t GYRO_MULTIPLIER;// = 0;
+extern const int8_t GYRO_PORT;// = 1;
+extern const int8_t GYRO_MULTIPLIER;// = 0;
 
-//extern Gyro gyro;
+extern Gyro gyro;
 
 // From opcontrol.c
 extern const int8_t DRIVE_AXIS;// = 3;
