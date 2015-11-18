@@ -70,10 +70,10 @@ void drive(int8_t vx, int8_t vy, int8_t r, bool is_field_centric) {
 	r /= 2;
 
 	if (is_field_centric) {
-		float angle = gyroGet(gyro) % 360 * M_PI / 180;
+		float heading = gyroGet(gyro) % 360 * M_PI / 180;
 		float v = hypotf(vx, vy);
-		vx = -1 * (int8_t) (v * sinf(angle));
-		vy = -1 * (int8_t) (v * cosf(angle));
+		vx = -1 * (int8_t) (v * sinf(heading));
+		vy = -1 * (int8_t) (v * cosf(heading));
 	}
 
 	// Linear filtering for gradual acceleration and reduced motor wear
