@@ -77,7 +77,7 @@ extern const int8_t DRIVE_BUTTON_GROUP;// = 7;
 extern const int8_t JOYSTICK_SLOT;// = 1;
 
 extern const int8_t WALKING_SPEED;// = 40;
-extern const int8_t DIAGONAL_DRIVE_THRESHOLD;// = 10;
+extern const int8_t DIAGONAL_DRIVE_DEADBAND;// = 10;
 
 // A function prototype looks exactly like its declaration, but with a semicolon instead of
 // actual code. If a function does not match a prototype, compile errors will occur.
