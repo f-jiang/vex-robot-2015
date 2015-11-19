@@ -1,6 +1,6 @@
 #include "main.h"
 
-#define MOTOR_LIMIT 12
+#define MOTOR_LIMIT 8
 #define FILTER_CYCLE_LIMIT 12
 
 int8_t ch, cy;
