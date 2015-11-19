@@ -77,10 +77,10 @@ void drive(int8_t vx, int8_t vy, int8_t r, bool is_field_centric) {
 	}
 
 	// Linear filtering for gradual acceleration and reduced motor wear
-	flspeed = getfSpeed(FRONT_LEFT_MOTOR_CHANNEL, -vy - vx + r);
-	blspeed = getfSpeed(BACK_LEFT_MOTOR_CHANNEL, -vy + vx + r);
-	frspeed = getfSpeed(FRONT_RIGHT_MOTOR_CHANNEL, vy - vx + r);
-	brspeed = getfSpeed(BACK_RIGHT_MOTOR_CHANNEL, vy + vx + r);
+	flspeed = getfSpeed(FRONT_LEFT_MOTOR_CHANNEL, vy + vx + r);
+	blspeed = getfSpeed(BACK_LEFT_MOTOR_CHANNEL, vy - vx + r);
+	frspeed = getfSpeed(FRONT_RIGHT_MOTOR_CHANNEL, -vy + vx + r);
+	brspeed = getfSpeed(BACK_RIGHT_MOTOR_CHANNEL, -vy - vx + r);
 
 	motorSet(FRONT_LEFT_MOTOR_CHANNEL, flspeed);
 	motorSet(BACK_LEFT_MOTOR_CHANNEL, blspeed);
