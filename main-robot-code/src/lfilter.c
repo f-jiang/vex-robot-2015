@@ -1,7 +1,7 @@
 #include "main.h"
 
 #define MOTOR_LIMIT 12
-#define FILTER_CYCLE_LIMIT 20
+#define FILTER_CYCLE_LIMIT 12
 
 int8_t ch, cy;
 int8_t data[MOTOR_LIMIT][FILTER_CYCLE_LIMIT] = { { 0 } };
