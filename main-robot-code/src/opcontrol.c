@@ -67,7 +67,6 @@ const int8_t MOVEMENT_THRESHOLD = 30;
  */
 void drive(int8_t vx, int8_t vy, int8_t r, bool is_field_centric) {
 	int8_t flspeed, blspeed, frspeed, brspeed;
-	r /= 2;
 
 	if (is_field_centric) {
 		float heading = -gyroGet(gyro) % 360 * M_PI / 180;
@@ -113,7 +112,7 @@ void operatorControl() {
 	while (true) {
 		xspeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, STRAFE_AXIS);
 		yspeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, DRIVE_AXIS);
-		rotation = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS);
+		rotation = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS) / 2;
 
 		// Uses button-based drive controls if joysticks aren't being used
 		if (abs(xspeed) < MOVEMENT_THRESHOLD &&
