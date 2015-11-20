@@ -56,28 +56,28 @@ extern "C" {
 
 // TODO: remove non-global vars when code nearing completion
 // From init.c
-extern const int8_t DRIVE_NUM_FILTER_CYCLES;// = 7;
+//extern const int8_t DRIVE_NUM_FILTER_CYCLES;// = 7;
 
 extern const int8_t FRONT_LEFT_MOTOR_CHANNEL;// = 2;
 extern const int8_t FRONT_RIGHT_MOTOR_CHANNEL;// = 3;
 extern const int8_t BACK_LEFT_MOTOR_CHANNEL;// = 4;
 extern const int8_t BACK_RIGHT_MOTOR_CHANNEL;// = 5;
 
-extern const int8_t GYRO_PORT;// = 1;
-extern const int8_t GYRO_MULTIPLIER;// = 0;
+//extern const int8_t GYRO_PORT;// = 1;
+//extern const int8_t GYRO_MULTIPLIER;// = 0;
 
 extern Gyro gyro;
 
 // From opcontrol.c
-extern const int8_t DRIVE_AXIS;// = 3;
-extern const int8_t STRAFE_AXIS;// = 4;
-extern const int8_t ROTATION_AXIS;// = 1;
-extern const int8_t DRIVE_BUTTON_GROUP;// = 7;
+//extern const int8_t DRIVE_AXIS;// = 3;
+//extern const int8_t STRAFE_AXIS;// = 4;
+//extern const int8_t ROTATION_AXIS;// = 1;
+//extern const int8_t DRIVE_BUTTON_GROUP;// = 7;
 
-extern const int8_t JOYSTICK_SLOT;// = 1;
+//extern const int8_t JOYSTICK_SLOT;// = 1;
 
-extern const int8_t WALKING_SPEED;// = 40;
-extern const int8_t DIAGONAL_DRIVE_DEADBAND;// = 10;
+//extern const int8_t WALKING_SPEED;// = 40;
+//extern const int8_t DIAGONAL_DRIVE_DEADBAND;// = 10;
 
 // A function prototype looks exactly like its declaration, but with a semicolon instead of
 // actual code. If a function does not match a prototype, compile errors will occur.
@@ -150,7 +150,7 @@ void operatorControl();
 // From lfilter.c
 void lfilterInit(const int8_t channel, int8_t num_fcycles);
 int8_t getfSpeed(const int8_t channel, int16_t speed);
-void lfilterClear(void);
+//void lfilterClear(void);
 
 // End C++ export structure
 #ifdef __cplusplus
