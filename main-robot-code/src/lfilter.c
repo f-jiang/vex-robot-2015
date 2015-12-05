@@ -3,6 +3,9 @@
 #define MOTOR_LIMIT 8
 #define FILTER_CYCLE_LIMIT 12
 
+const int8_t MAX_SPEED = 127;
+const int8_t MIN_SPEED = -127;
+
 int8_t ch, cy;
 int8_t data[MOTOR_LIMIT][FILTER_CYCLE_LIMIT] = { { 0 } };
 int8_t chindex[MOTOR_LIMIT] = { [0 ... MOTOR_LIMIT - 1] = -1 };
@@ -62,10 +65,10 @@ int8_t getfSpeed(const int8_t channel, int16_t speed) {
 	if (channel > 0 && channel <= MOTOR_LIMIT && chindex[channel - 1] != -1) {
 		ch = chindex[channel - 1];
 
-		if (speed > INT8_MAX) {	// when calling motorSet, the speed must be between -127 and 127
-			speed = INT8_MAX;
-		} else if (speed < INT8_MIN) {
-			speed = INT8_MIN;
+		if (speed > MAX_SPEED) {	// when calling motorSet, the speed must be between -127 and 127
+			speed = MAX_SPEED;
+		} else if (speed < MIN_SPEED) {
+			speed = MIN_SPEED;
 		}
 
 		for (cy = fcycles[ch] - 1; cy > -1; --cy) {
