@@ -38,12 +38,18 @@ const int8_t DRIVE_AXIS = 3;
 const int8_t STRAFE_AXIS = 4;
 const int8_t ROTATION_AXIS = 1;
 const int8_t DRIVE_BUTTON_GROUP = 7;
+const int8_t DRIVE_BUTTON_GROUP2 = 8;
+const int8_t LIFTER_BUTTON_GROUP = 5;
+const int8_t BALL_INTAKE_BUTTON_GROUP = 6;
 
 const int8_t JOYSTICK_SLOT = 1;
 
 const int8_t WALKING_SPEED = 40;
 const int8_t DIAGONAL_DRIVE_DEADBAND = 30;
 const int8_t MOVEMENT_DEADBAND = 30;
+
+const int8_t BALL_INTAKE_SPEED = 60;
+const int8_t LIFTER_SPEED = 60;
 
 /**
  * TODO: test field-centric drive
@@ -87,6 +93,18 @@ void drive(int8_t vx, int8_t vy, int8_t r, bool is_field_centric) {
 	motorSet(BACK_RIGHT_MOTOR_CHANNEL, brspeed);
 }
 
+void ballIntake(int8_t ispeed) {
+	// Linear filtering for gradual acceleration and reduced motor wear
+		int8_t ispeed2 = getfSpeed(BALL_INTAKE_MOTOR_CHANNEL, ispeed);
+		motorSet(BALL_INTAKE_MOTOR_CHANNEL, ispeed2);
+}
+
+void lifter(int8_t lspeed) {
+	// Linear filtering for gradual acceleration and reduced motor wear
+		int8_t lspeed2 = getfSpeed(LIFTER_MOTOR_CHANNEL, lspeed);
+		motorSet(LIFTER_MOTOR_CHANNEL, lspeed2);
+}
+
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via the Field Management System
@@ -106,6 +124,7 @@ void drive(int8_t vx, int8_t vy, int8_t r, bool is_field_centric) {
  */
 void operatorControl() {
 	int8_t xspeed, yspeed, rotation;
+	int8_t liftSpeed, intakeSpeed;
 
 	//lfilterClear();
 
@@ -144,6 +163,26 @@ void operatorControl() {
 		}
 
 		drive(xspeed, yspeed, rotation, false);
+
+		if (joystickGetDigital(JOYSTICK_SLOT, BALL_INTAKE_BUTTON_GROUP, JOY_UP)) {
+			intakeSpeed = BALL_INTAKE_SPEED;
+		} else if (joystickGetDigital(JOYSTICK_SLOT, BALL_INTAKE_BUTTON_GROUP ,JOY_DOWN)) {
+			intakeSpeed = -BALL_INTAKE_SPEED;
+		} else {
+			intakeSpeed = 0;
+		}
+
+
+		if (joystickGetDigital(JOYSTICK_SLOT, LIFTER_BUTTON_GROUP, JOY_UP)) {
+			liftSpeed = LIFTER_SPEED;
+		} else if (joystickGetDigital(JOYSTICK_SLOT, LIFTER_BUTTON_GROUP ,JOY_DOWN)) {
+			liftSpeed = -LIFTER_SPEED;
+		} else {
+			liftSpeed = 0;
+		}
+
+		ballIntake(intakeSpeed);
+		lifter(liftSpeed);
 
 		delay(20);
 	}
