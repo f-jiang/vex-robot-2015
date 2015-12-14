@@ -51,7 +51,10 @@ const int8_t MOVEMENT_DEADBAND = 30;
 const int8_t BALL_INTAKE_SPEED = 60;
 const int8_t LIFTER_SPEED = 60;
 
-const int8_t SHOOTER_SPEED = 80;
+const int8_t DEFAULT_SHOOTER_SPEED = 120;
+const int8_t SHOOTER_INCREMENT = 10;
+const int8_t MAXIMUM_SHOOTER_CAP = 127;
+const int8_t MINIMUM_SHOOTER_CAP = 0;
 
 /**
  * TODO: test field-centric drive
@@ -135,8 +138,8 @@ void shooter(int8_t sspeed){
 void operatorControl() {
 	int8_t xspeed, yspeed, rotation;
 	int8_t liftSpeed, intakeSpeed;
-	int8_t shooterOffset = 0;
-	int8_t shooterSpeed = 0;
+	//int8_t shooterOffset = 0;
+	int8_t shooterSpeed = DEFAULT_SHOOTER_SPEED;	//shooter is on when robot starts
 	bool previous_increase_state = false; //corresponds to shooter buttons, PURPOSE: toggle
 	bool previous_decrease_state = false; //corresponds to shooter buttons, PURPOSE: toggle
 	bool previous_toggle_state = false;   //corresponds to shooter buttons, PURPOSE: toggle
@@ -201,7 +204,8 @@ void operatorControl() {
 		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_DOWN)) {
 			if (!previous_toggle_state) {
 				is_shooter_on = !is_shooter_on;
-				shooterSpeed = is_shooter_on ? SHOOTER_SPEED + shooterOffset : 0;
+//				shooterSpeed = is_shooter_on ? DEFAULT_SHOOTER_SPEED + shooterOffset : 0;
+				shooterSpeed = is_shooter_on ? DEFAULT_SHOOTER_SPEED : 0;
 			}
 			previous_toggle_state = true;
 		} else {
@@ -210,18 +214,26 @@ void operatorControl() {
 
 		// shooter decrease speed
 		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_LEFT)) {
-			if (!previous_decrease_state && shooterOffset >= -70){
-				shooterOffset = shooterOffset - 10;
+			if (!previous_decrease_state && is_shooter_on){
+//				shooterOffset -= 10;
+				shooterSpeed += SHOOTER_INCREMENT;
+				if (shooterSpeed > MAXIMUM_SHOOTER_CAP) {
+					shooterSpeed = MAXIMUM_SHOOTER_CAP;
+				}
 			}
 			previous_decrease_state = true;
 		}	else {
-			previous_increase_state = false;
+			previous_decrease_state = false;
 		}
 
 		// shooter increase speed
 		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_RIGHT)) {
-			if (!previous_increase_state && shooterOffset <= 40){
-				shooterOffset += 10;
+			if (!previous_increase_state && is_shooter_on){
+//				shooterOffset += 10;
+				shooterSpeed -= SHOOTER_INCREMENT;
+				if (shooterSpeed < MINIMUM_SHOOTER_CAP) {
+					shooterSpeed = MINIMUM_SHOOTER_CAP;
+				}
 			}
 			previous_increase_state = true;
 		}  else {
