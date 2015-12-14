@@ -1,4 +1,4 @@
-/** @file init.c
+/** @file init.c+
  * @brief File for initialization code
  *
  * This file should contain the user initialize() function and any functions related to it.
@@ -35,8 +35,10 @@
 #include "main.h"
 
 const int8_t DRIVE_NUM_FILTER_CYCLES = 12;
-	const int8_t BALL_INTAKE_NUM_FILTER_CYCLES = 7;
-	const int8_t LIFTER_NUM_FILTER_CYCLES = 8;
+const int8_t BALL_INTAKE_NUM_FILTER_CYCLES = 7;
+const int8_t LIFTER_NUM_FILTER_CYCLES = 8;
+const int8_t SHOOTER_NUM_FILTER_CYCLES = 12;
+const int8_t SHOOTER2_NUM_FILTER_CYCLES = 12;
 
 const int8_t FRONT_LEFT_MOTOR_CHANNEL = 2;
 const int8_t FRONT_RIGHT_MOTOR_CHANNEL = 3;
@@ -45,6 +47,9 @@ const int8_t BACK_RIGHT_MOTOR_CHANNEL = 5;
 
 const int8_t BALL_INTAKE_MOTOR_CHANNEL = 6;
 const int8_t LIFTER_MOTOR_CHANNEL = 7;
+
+const int8_t SHOOTER_MOTOR_CHANNEL = 9;
+const int8_t SHOOTER_MOTOR_CHANNEL2 = 10;
 
 const int8_t GYRO_PORT = 1;
 const int8_t GYRO_MULTIPLIER = 0;
@@ -85,6 +90,9 @@ void initialize() {
 
 	lfilterInit(BALL_INTAKE_MOTOR_CHANNEL, BALL_INTAKE_NUM_FILTER_CYCLES);
 	lfilterInit(LIFTER_MOTOR_CHANNEL, LIFTER_NUM_FILTER_CYCLES);
+
+	lfilterInit(SHOOTER_MOTOR_CHANNEL, SHOOTER_NUM_FILTER_CYCLES);
+	lfilterInit(SHOOTER_MOTOR_CHANNEL2, SHOOTER2_NUM_FILTER_CYCLES);
 
 	delay(2000);
 }

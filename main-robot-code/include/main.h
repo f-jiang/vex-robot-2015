@@ -66,6 +66,9 @@ extern const int8_t BACK_RIGHT_MOTOR_CHANNEL;// = 5;
 extern const int8_t BALL_INTAKE_MOTOR_CHANNEL;// = 6;
 extern const int8_t LIFTER_MOTOR_CHANNEL;// = 7;
 
+extern const int8_t SHOOTER_MOTOR_CHANNEL;
+extern const int8_t SHOOTER_MOTOR_CHANNEL2;
+
 //extern const int8_t GYRO_PORT;// = 1;
 //extern const int8_t GYRO_MULTIPLIER;// = 0;
 

@@ -38,7 +38,7 @@ const int8_t DRIVE_AXIS = 3;
 const int8_t STRAFE_AXIS = 4;
 const int8_t ROTATION_AXIS = 1;
 const int8_t DRIVE_BUTTON_GROUP = 7;
-const int8_t DRIVE_BUTTON_GROUP2 = 8;
+const int8_t SHOOTER_BUTTON_GROUP = 8;
 const int8_t LIFTER_BUTTON_GROUP = 5;
 const int8_t BALL_INTAKE_BUTTON_GROUP = 6;
 
@@ -50,6 +50,8 @@ const int8_t MOVEMENT_DEADBAND = 30;
 
 const int8_t BALL_INTAKE_SPEED = 60;
 const int8_t LIFTER_SPEED = 60;
+
+const int8_t SHOOTER_SPEED = 80;
 
 /**
  * TODO: test field-centric drive
@@ -105,6 +107,14 @@ void lifter(int8_t lspeed) {
 		motorSet(LIFTER_MOTOR_CHANNEL, lspeed2);
 }
 
+void shooter(int8_t sspeed){
+	// Linear filtering for gradual acceleration and reduced motor wear
+	int8_t sspeed2 = getfSpeed(SHOOTER_MOTOR_CHANNEL, sspeed);
+	int8_t sspeed3 = getfSpeed(SHOOTER_MOTOR_CHANNEL2, sspeed);
+	motorSet (SHOOTER_MOTOR_CHANNEL , -sspeed2);
+	motorSet (SHOOTER_MOTOR_CHANNEL2, sspeed3);
+}
+
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via the Field Management System
@@ -125,6 +135,10 @@ void lifter(int8_t lspeed) {
 void operatorControl() {
 	int8_t xspeed, yspeed, rotation;
 	int8_t liftSpeed, intakeSpeed;
+	int8_t shooterOffset = 0;
+	int8_t shooterSpeed;
+	bool previous_increase_state = false; //corresponds to shooter buttons, PURPOSE: toggle
+	bool previous_decrease_state = false; //corresponds to shooter buttons, PURPOSE: toggle
 
 	//lfilterClear();
 
@@ -172,7 +186,6 @@ void operatorControl() {
 			intakeSpeed = 0;
 		}
 
-
 		if (joystickGetDigital(JOYSTICK_SLOT, LIFTER_BUTTON_GROUP, JOY_UP)) {
 			liftSpeed = LIFTER_SPEED;
 		} else if (joystickGetDigital(JOYSTICK_SLOT, LIFTER_BUTTON_GROUP ,JOY_DOWN)) {
@@ -181,8 +194,37 @@ void operatorControl() {
 			liftSpeed = 0;
 		}
 
+
+		// shooter on button
+		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_DOWN)) {
+			shooterSpeed = SHOOTER_SPEED + shooterOffset;
+		} else {
+			shooterSpeed = 0;
+		}
+
+		// shooter decrease speed
+		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_LEFT)) {
+			if (!previous_decrease_state && shooterOffset >= -70){
+				shooterOffset = shooterOffset - 10;
+			}
+			previous_decrease_state = true;
+		}	else {
+			previous_increase_state = false;
+		}
+
+		// shooter increase speed
+		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_RIGHT)) {
+			if (!previous_increase_state && shooterOffset <= 40){
+				shooterOffset += 10;
+			}
+			previous_increase_state = true;
+		}  else {
+			previous_increase_state = false;
+		}
+
 		ballIntake(intakeSpeed);
 		lifter(liftSpeed);
+		shooter(shooterSpeed);
 
 		delay(20);
 	}
