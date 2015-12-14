@@ -136,7 +136,7 @@ void operatorControl() {
 	int8_t xspeed, yspeed, rotation;
 	int8_t liftSpeed, intakeSpeed;
 	int8_t shooterOffset = 0;
-	int8_t shooterSpeed;
+	int8_t shooterSpeed = 0;
 	bool previous_increase_state = false; //corresponds to shooter buttons, PURPOSE: toggle
 	bool previous_decrease_state = false; //corresponds to shooter buttons, PURPOSE: toggle
 	bool previous_toggle_state = false;   //corresponds to shooter buttons, PURPOSE: toggle
