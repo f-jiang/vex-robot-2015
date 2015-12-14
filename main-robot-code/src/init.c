@@ -48,8 +48,8 @@ const int8_t BACK_RIGHT_MOTOR_CHANNEL = 5;
 const int8_t BALL_INTAKE_MOTOR_CHANNEL = 6;
 const int8_t LIFTER_MOTOR_CHANNEL = 7;
 
-const int8_t SHOOTER_MOTOR_CHANNEL = 9;
-const int8_t SHOOTER_MOTOR_CHANNEL2 = 10;
+const int8_t SHOOTER_MOTOR_CHANNEL = 8;
+const int8_t SHOOTER_MOTOR_CHANNEL2 = 9;
 
 const int8_t GYRO_PORT = 1;
 const int8_t GYRO_MULTIPLIER = 0;
