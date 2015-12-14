@@ -139,6 +139,8 @@ void operatorControl() {
 	int8_t shooterSpeed;
 	bool previous_increase_state = false; //corresponds to shooter buttons, PURPOSE: toggle
 	bool previous_decrease_state = false; //corresponds to shooter buttons, PURPOSE: toggle
+	bool previous_toggle_state = false;   //corresponds to shooter buttons, PURPOSE: toggle
+	bool is_shooter_on = true;
 
 	//lfilterClear();
 
@@ -197,9 +199,13 @@ void operatorControl() {
 
 		// shooter on button
 		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_DOWN)) {
-			shooterSpeed = SHOOTER_SPEED + shooterOffset;
+			if (!previous_toggle_state) {
+				is_shooter_on = !is_shooter_on;
+				shooterSpeed = is_shooter_on ? SHOOTER_SPEED + shooterOffset : 0;
+			}
+			previous_toggle_state = true;
 		} else {
-			shooterSpeed = 0;
+			previous_toggle_state = false;
 		}
 
 		// shooter decrease speed
