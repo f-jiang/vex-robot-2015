@@ -1,6 +1,6 @@
 #include "main.h"
 
-#define MOTOR_LIMIT 8
+#define MOTOR_LIMIT 10
 #define FILTER_CYCLE_LIMIT 12
 
 const int8_t MAX_SPEED = 127;
