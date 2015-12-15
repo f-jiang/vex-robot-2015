@@ -96,5 +96,5 @@ void initialize() {
 	lfilterInit(SHOOTER_MOTOR_CHANNEL, SHOOTER_NUM_FILTER_CYCLES);
 	lfilterInit(SHOOTER_MOTOR_CHANNEL2, SHOOTER2_NUM_FILTER_CYCLES);
 
-	delay(2000);
+//	delay(2000);
 }

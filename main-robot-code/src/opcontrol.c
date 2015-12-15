@@ -112,8 +112,8 @@ void lifter(int8_t lspeed) {
 
 void shooter(int8_t sspeed){
 	// Linear filtering for gradual acceleration and reduced motor wear
-	int8_t sspeed2 = getfSpeed(SHOOTER_MOTOR_CHANNEL, sspeed);
-	int8_t sspeed3 = getfSpeed(SHOOTER_MOTOR_CHANNEL2, -sspeed);
+	int8_t sspeed2 = getfSpeed(SHOOTER_MOTOR_CHANNEL, -sspeed);
+	int8_t sspeed3 = getfSpeed(SHOOTER_MOTOR_CHANNEL2, sspeed);
 	motorSet (SHOOTER_MOTOR_CHANNEL , sspeed2);
 	motorSet (SHOOTER_MOTOR_CHANNEL2, sspeed3);
 }
@@ -220,7 +220,7 @@ void operatorControl() {
 		}
 
 		// shooter decrease speed
-		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_LEFT)) {
+		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_RIGHT)) {
 			if (!previous_decrease_state && is_shooter_on){
 				shooterSpeed += SHOOTER_INCREMENT;
 				if (shooterSpeed > MAXIMUM_SHOOTER_CAP) {
@@ -233,7 +233,7 @@ void operatorControl() {
 		}
 
 		// shooter increase speed
-		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_RIGHT)) {
+		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_LEFT)) {
 			if (!previous_increase_state && is_shooter_on){
 				shooterSpeed -= SHOOTER_INCREMENT;
 				if (shooterSpeed < MINIMUM_SHOOTER_CAP) {
