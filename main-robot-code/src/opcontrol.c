@@ -204,7 +204,6 @@ void operatorControl() {
 		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_DOWN)) {
 			if (!previous_toggle_state) {
 				is_shooter_on = !is_shooter_on;
-//				shooterSpeed = is_shooter_on ? DEFAULT_SHOOTER_SPEED + shooterOffset : 0;
 				shooterSpeed = is_shooter_on ? DEFAULT_SHOOTER_SPEED : 0;
 			}
 			previous_toggle_state = true;
@@ -215,7 +214,6 @@ void operatorControl() {
 		// shooter decrease speed
 		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_LEFT)) {
 			if (!previous_decrease_state && is_shooter_on){
-//				shooterOffset -= 10;
 				shooterSpeed += SHOOTER_INCREMENT;
 				if (shooterSpeed > MAXIMUM_SHOOTER_CAP) {
 					shooterSpeed = MAXIMUM_SHOOTER_CAP;
@@ -229,7 +227,6 @@ void operatorControl() {
 		// shooter increase speed
 		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_RIGHT)) {
 			if (!previous_increase_state && is_shooter_on){
-//				shooterOffset += 10;
 				shooterSpeed -= SHOOTER_INCREMENT;
 				if (shooterSpeed < MINIMUM_SHOOTER_CAP) {
 					shooterSpeed = MINIMUM_SHOOTER_CAP;
