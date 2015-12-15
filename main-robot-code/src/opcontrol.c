@@ -118,6 +118,11 @@ void shooter(int8_t sspeed){
 	motorSet (SHOOTER_MOTOR_CHANNEL2, sspeed3);
 }
 
+void takeIn(int8_t speed) {
+	int8_t fspeed = getfSpeed(FRONT_INTAKE_MOTOR_CHANNEL, -speed);
+	motorSet(FRONT_INTAKE_MOTOR_CHANNEL, fspeed);
+}
+
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via the Field Management System
@@ -145,6 +150,9 @@ void operatorControl() {
 	bool previous_toggle_state = false;   //corresponds to shooter buttons, PURPOSE: toggle
 	bool is_shooter_on = true;
 
+	bool is_front_intake_on = true;
+	bool previous_intake_toggle_state = false;
+	int8_t front_intake_speed = BALL_INTAKE_SPEED;
 	//lfilterClear();
 
 	while (true) {
@@ -240,6 +248,19 @@ void operatorControl() {
 		ballIntake(intakeSpeed);
 		lifter(liftSpeed);
 		shooter(shooterSpeed);
+
+
+		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_UP)) {
+			if (!previous_intake_toggle_state) {
+				is_front_intake_on = !is_front_intake_on;
+				front_intake_speed = is_front_intake_on ? BALL_INTAKE_SPEED : 0;
+			}
+			previous_intake_toggle_state = true;
+		}  else {
+			previous_intake_toggle_state = false;
+		}
+
+		takeIn(front_intake_speed);
 
 		delay(20);
 	}

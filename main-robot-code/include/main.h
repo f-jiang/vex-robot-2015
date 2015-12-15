@@ -63,6 +63,7 @@ extern const int8_t FRONT_RIGHT_MOTOR_CHANNEL;// = 3;
 extern const int8_t BACK_LEFT_MOTOR_CHANNEL;// = 4;
 extern const int8_t BACK_RIGHT_MOTOR_CHANNEL;// = 5;
 
+extern const int8_t FRONT_INTAKE_MOTOR_CHANNEL;// = 1;
 extern const int8_t BALL_INTAKE_MOTOR_CHANNEL;// = 6;
 extern const int8_t LIFTER_MOTOR_CHANNEL;// = 7;
 
