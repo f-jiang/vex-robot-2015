@@ -48,7 +48,7 @@ const int8_t WALKING_SPEED = 40;
 const int8_t DIAGONAL_DRIVE_DEADBAND = 30;
 const int8_t MOVEMENT_DEADBAND = 30;
 
-const int8_t BALL_INTAKE_SPEED = 100;
+const int8_t BALL_INTAKE_SPEED = 127;
 const int8_t LIFTER_SPEED = 60;
 
 const int8_t DEFAULT_SHOOTER_SPEED = 127;
