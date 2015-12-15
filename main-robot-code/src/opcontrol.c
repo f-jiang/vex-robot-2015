@@ -112,8 +112,8 @@ void lifter(int8_t lspeed) {
 
 void shooter(int8_t sspeed){
 	// Linear filtering for gradual acceleration and reduced motor wear
-	int8_t sspeed2 = getfSpeed(SHOOTER_MOTOR_CHANNEL, -sspeed);
-	int8_t sspeed3 = getfSpeed(SHOOTER_MOTOR_CHANNEL2, sspeed);
+	int8_t sspeed2 = getfSpeed(SHOOTER_MOTOR_CHANNEL, sspeed);
+	int8_t sspeed3 = getfSpeed(SHOOTER_MOTOR_CHANNEL2, -sspeed);
 	motorSet (SHOOTER_MOTOR_CHANNEL , sspeed2);
 	motorSet (SHOOTER_MOTOR_CHANNEL2, sspeed3);
 }
@@ -144,7 +144,7 @@ void operatorControl() {
 	int8_t xspeed, yspeed, rotation;
 	int8_t liftSpeed, intakeSpeed;
 	//int8_t shooterOffset = 0;
-	int8_t shooterSpeed = DEFAULT_SHOOTER_SPEED;	//shooter is on when robot starts
+	int16_t shooterSpeed = DEFAULT_SHOOTER_SPEED;	//shooter is on when robot starts
 	bool previous_increase_state = false; //corresponds to shooter buttons, PURPOSE: toggle
 	bool previous_decrease_state = false; //corresponds to shooter buttons, PURPOSE: toggle
 	bool previous_toggle_state = false;   //corresponds to shooter buttons, PURPOSE: toggle
