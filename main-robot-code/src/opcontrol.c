@@ -77,7 +77,9 @@ const int8_t MINIMUM_SHOOTER_CAP = 0;
  * 					  playing field rather than the robot
  */
 void drive(int8_t vx, int8_t vy, int8_t r, bool is_field_centric) {
-	int8_t flspeed, blspeed, frspeed, brspeed;
+	int16_t raw_speeds[4];	// one for each wheel
+	int16_t abs_raw_speed, max_raw_speed;
+	int8_t i;
 
 	if (is_field_centric) {
 		float heading = -gyroGet(gyro) % 360 * M_PI / 180;
@@ -86,16 +88,36 @@ void drive(int8_t vx, int8_t vy, int8_t r, bool is_field_centric) {
 		vy = (int8_t) (v * cosf(heading));
 	}
 
-	// Linear filtering for gradual acceleration and reduced motor wear
-	flspeed = getfSpeed(FRONT_LEFT_MOTOR_CHANNEL, vy + vx + r);
-	blspeed = getfSpeed(BACK_LEFT_MOTOR_CHANNEL, vy - vx + r);
-	frspeed = getfSpeed(FRONT_RIGHT_MOTOR_CHANNEL, -vy + vx + r);
-	brspeed = getfSpeed(BACK_RIGHT_MOTOR_CHANNEL, -vy - vx + r);
+	raw_speeds[0] = vy + vx + r;	// front left
+	raw_speeds[1] = vy - vx + r;	// back left
+	raw_speeds[2] = -vy + vx + r;	// front right
+	raw_speeds[3] = -vy - vx + r;	// back right
 
-	motorSet(FRONT_LEFT_MOTOR_CHANNEL, flspeed);
-	motorSet(BACK_LEFT_MOTOR_CHANNEL, blspeed);
-	motorSet(FRONT_RIGHT_MOTOR_CHANNEL, frspeed);
-	motorSet(BACK_RIGHT_MOTOR_CHANNEL, brspeed);
+	max_raw_speed = 0;
+	for (i = 0; i < 4; ++i) {
+		abs_raw_speed = abs(raw_speeds[i]);
+		if (abs_raw_speed > max_raw_speed) {
+			max_raw_speed = abs_raw_speed;
+		}
+	}
+
+	if (max_raw_speed > MAXIMUM_SHOOTER_CAP) {	// TODO: replace MAXIMUM_SHOOTER_CAP with macro
+		float scale = (float) max_raw_speed / MAXIMUM_SHOOTER_CAP;
+		for (i = 0; i < 4; ++i) {
+			raw_speeds[i] /= scale;
+		}
+	}
+
+	// Linear filtering for gradual acceleration and reduced motor wear
+	raw_speeds[0] = getfSpeed(FRONT_LEFT_MOTOR_CHANNEL, raw_speeds[0]);
+	raw_speeds[1] = getfSpeed(BACK_LEFT_MOTOR_CHANNEL, raw_speeds[1]);
+	raw_speeds[2] = getfSpeed(FRONT_RIGHT_MOTOR_CHANNEL, raw_speeds[2]);
+	raw_speeds[3] = getfSpeed(BACK_RIGHT_MOTOR_CHANNEL, raw_speeds[3]);
+
+	motorSet(FRONT_LEFT_MOTOR_CHANNEL, raw_speeds[0]);
+	motorSet(BACK_LEFT_MOTOR_CHANNEL, raw_speeds[1]);
+	motorSet(FRONT_RIGHT_MOTOR_CHANNEL, raw_speeds[2]);
+	motorSet(BACK_RIGHT_MOTOR_CHANNEL, raw_speeds[3]);
 }
 
 void ballIntake(int8_t ispeed) {
