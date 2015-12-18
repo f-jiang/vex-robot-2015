@@ -64,7 +64,7 @@ extern const int8_t BACK_LEFT_MOTOR_CHANNEL;// = 4;
 extern const int8_t BACK_RIGHT_MOTOR_CHANNEL;// = 5;
 
 extern const int8_t FRONT_INTAKE_MOTOR_CHANNEL;// = 1;
-extern const int8_t BALL_INTAKE_MOTOR_CHANNEL;// = 6;
+extern const int8_t INTERNAL_INTAKE_MOTOR_CHANNEL;// = 6;
 extern const int8_t LIFTER_MOTOR_CHANNEL;// = 7;
 
 extern const int8_t SHOOTER_MOTOR_CHANNEL;
@@ -151,11 +151,11 @@ void initialize();
  *
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
-void drive(int8_t vx, int8_t vy, int8_t r, bool is_field_centric);
+void drive(int8_t vx, int8_t vy, int8_t r, bool isFieldCentric);
 void operatorControl();
 
 // From lfilter.c
-void lfilterInit(const int8_t channel, int8_t num_fcycles);
+void lfilterInit(const int8_t channel, int8_t numfCycles);
 int8_t getfSpeed(const int8_t channel, int16_t speed);
 //void lfilterClear(void);
 
