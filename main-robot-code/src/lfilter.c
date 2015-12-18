@@ -23,18 +23,18 @@ int8_t count = 0;
  * num_fcycles - the duration of the filtering effect; a higher value will result in a more
  * 				 gradual acceleration
  */
-void lfilterInit(const int8_t channel, int8_t num_fcycles) {
+void lfilterInit(const int8_t channel, int8_t numfCycles) {
 	if (channel > 0 && channel <= MOTOR_LIMIT
 			&& count < MOTOR_LIMIT
 			&& chindex[channel - 1] == -1) {
-		if (num_fcycles > FILTER_CYCLE_LIMIT) {
-			num_fcycles = FILTER_CYCLE_LIMIT;
-		} else if (num_fcycles < 1) {
-			num_fcycles = 1;
+		if (numfCycles > FILTER_CYCLE_LIMIT) {
+			numfCycles = FILTER_CYCLE_LIMIT;
+		} else if (numfCycles < 1) {
+			numfCycles = 1;
 		}
 
 		chindex[channel - 1] = count;
-		fcycles[count++] = num_fcycles;
+		fcycles[count++] = numfCycles;
 	}
 }
 
