@@ -34,25 +34,15 @@
 
 #include "main.h"
 
-const int8_t DRIVE_NUM_FILTER_CYCLES = 12;
-const int8_t INTAKE_NUM_FILTER_CYCLES = 7;
-const int8_t LIFTER_NUM_FILTER_CYCLES = 8;
-const int8_t SHOOTER_NUM_FILTER_CYCLES = 12;
+#include "lfilter.h"
 
-const int8_t FRONT_LEFT_MOTOR_CHANNEL = 2;
-const int8_t FRONT_RIGHT_MOTOR_CHANNEL = 3;
-const int8_t BACK_LEFT_MOTOR_CHANNEL = 4;
-const int8_t BACK_RIGHT_MOTOR_CHANNEL = 5;
+#define DRIVE_NUM_FILTER_CYCLES 12
+#define INTAKE_NUM_FILTER_CYCLES 7
+#define LIFTER_NUM_FILTER_CYCLES 8
+#define SHOOTER_NUM_FILTER_CYCLES 12
 
-const int8_t FRONT_INTAKE_MOTOR_CHANNEL = 1;
-const int8_t INTERNAL_INTAKE_MOTOR_CHANNEL = 6;
-const int8_t LIFTER_MOTOR_CHANNEL = 7;
-
-const int8_t SHOOTER_MOTOR_CHANNEL = 8;
-const int8_t SHOOTER_MOTOR_CHANNEL2 = 9;
-
-const int8_t GYRO_PORT = 1;
-const int8_t GYRO_MULTIPLIER = 0;
+#define GYRO_PORT 1
+#define GYRO_MULTIPLIER 0
 
 Gyro gyro;
 

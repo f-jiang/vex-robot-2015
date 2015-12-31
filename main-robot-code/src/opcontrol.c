@@ -34,95 +34,30 @@
 
 #include "main.h"
 
-const int8_t JOYSTICK_SLOT = 1;
+#include "actions.h"
+#include <stdint.h>
+#include <stdbool.h>
 
-const int8_t DRIVE_AXIS = 3;
-const int8_t STRAFE_AXIS = 4;
-const int8_t ROTATION_AXIS = 1;
+#define JOYSTICK_SLOT 1
 
-const int8_t DRIVE_BUTTON_GROUP = 7;
-const int8_t SHOOTER_BUTTON_GROUP = 8;
-const int8_t LIFTER_BUTTON_GROUP = 5;
-const int8_t INTAKE_BUTTON_GROUP = 6;
+#define DRIVE_AXIS 3
+#define STRAFE_AXIS 4
+#define ROTATION_AXIS 1
 
-const int8_t WALKING_SPEED = 40;
-const int8_t DIAGONAL_DRIVE_DEADBAND = 30;
-const int8_t MOVEMENT_DEADBAND = 30;
+#define DRIVE_BUTTON_GROUP 7
+#define SHOOTER_BUTTON_GROUP 8
+#define LIFTER_BUTTON_GROUP 5
+#define INTAKE_BUTTON_GROUP 6
 
-const int8_t INTAKE_SPEED = 127;
-const int8_t LIFTER_SPEED = 60;
+#define WALKING_SPEED 40
+#define DIAGONAL_DRIVE_DEADBAND 30
+#define MOVEMENT_DEADBAND 30
 
-const int8_t DEFAULT_SHOOTER_SPEED = 127;
-const int8_t SHOOTER_SPEED_INCREMENT = 10;
-const int8_t MAXIMUM_SHOOTER_CAP = 127;
-const int8_t MINIMUM_SHOOTER_CAP = 0;
+#define INTAKE_SPEED 127
+#define LIFTER_SPEED 60
 
-/**
- * TODO: test field-centric drive
- * TODO: see if signs need to be changed
- *
- * Drives and/or rotates the robot at the specified speed. The direction is determined from the
- * hypotenuse of vx and vy (see "Parameters" for their definitions).
- *
- * Because the robot has a holonomic drive, it is capable of traversing at any angle regardless
- * of its orientation.
- *
- * This function only applies one pulse to the drive motors and should be called from within a
- * loop.
- *
- * Parameters:
- * vx - the horizontal speed of the robot; -127 for full left, 127 for full right
- * vy - the vertical speed of the robot; -127 for full down, 127 for full up
- * r  - the rotational speed of the robot; -127 for full counterclockwise, 127 for full clockwise
- * is_field_centric - if set to true, the direction of the robot's motion will be relative to the
- * 					  playing field rather than the robot
- */
-void drive(int8_t vx, int8_t vy, int8_t r, bool isFieldCentric) {
-	int8_t flspeed, blspeed, frspeed, brspeed;
-
-	if (isFieldCentric) {
-		float heading = -gyroGet(gyro) % 360 * M_PI / 180;
-		float v = hypotf(vx, vy);
-		vx = (int8_t) (v * sinf(heading));
-		vy = (int8_t) (v * cosf(heading));
-	}
-
-	// Linear filtering for gradual acceleration and reduced motor wear
-	flspeed = getfSpeed(FRONT_LEFT_MOTOR_CHANNEL, vy + vx + r);
-	blspeed = getfSpeed(BACK_LEFT_MOTOR_CHANNEL, vy - vx + r);
-	frspeed = getfSpeed(FRONT_RIGHT_MOTOR_CHANNEL, -vy + vx + r);
-	brspeed = getfSpeed(BACK_RIGHT_MOTOR_CHANNEL, -vy - vx + r);
-
-	motorSet(FRONT_LEFT_MOTOR_CHANNEL, flspeed);
-	motorSet(BACK_LEFT_MOTOR_CHANNEL, blspeed);
-	motorSet(FRONT_RIGHT_MOTOR_CHANNEL, frspeed);
-	motorSet(BACK_RIGHT_MOTOR_CHANNEL, brspeed);
-}
-
-void takeInInternal(int8_t ispeed) {
-	// Linear filtering for gradual acceleration and reduced motor wear
-	int8_t ispeed2 = getfSpeed(INTERNAL_INTAKE_MOTOR_CHANNEL, ispeed);
-	motorSet(INTERNAL_INTAKE_MOTOR_CHANNEL, ispeed2);
-}
-
-void lifter(int8_t lspeed) {
-	// Linear filtering for gradual acceleration and reduced motor wear
-	int8_t lspeed2 = getfSpeed(LIFTER_MOTOR_CHANNEL, lspeed);
-	motorSet(LIFTER_MOTOR_CHANNEL, lspeed2);
-}
-
-void shooter(int8_t sspeed){
-	// Linear filtering for gradual acceleration and reduced motor wear
-	int8_t sspeed2 = getfSpeed(SHOOTER_MOTOR_CHANNEL, -sspeed);
-	int8_t sspeed3 = getfSpeed(SHOOTER_MOTOR_CHANNEL2, sspeed);
-	motorSet (SHOOTER_MOTOR_CHANNEL , sspeed2);
-	motorSet (SHOOTER_MOTOR_CHANNEL2, sspeed3);
-}
-
-void takeInFront(int8_t speed) {
-	int8_t fspeed = getfSpeed(FRONT_INTAKE_MOTOR_CHANNEL, -speed);
-	motorSet(FRONT_INTAKE_MOTOR_CHANNEL, fspeed);
-}
+#define DEFAULT_SHOOTER_SPEED 127
+#define SHOOTER_SPEED_INCREMENT 10
 
 /*
  * Runs the user operator control code. This function will be started in its own task with the
@@ -227,8 +162,8 @@ void operatorControl() {
 		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_RIGHT)) {
 			if (!previousDecreaseState && isShooterOn){
 				shooterSpeed += SHOOTER_SPEED_INCREMENT;
-				if (shooterSpeed > MAXIMUM_SHOOTER_CAP) {
-					shooterSpeed = MAXIMUM_SHOOTER_CAP;
+				if (shooterSpeed > MAX_SPEED) {
+					shooterSpeed = MAX_SPEED;
 				}
 			}
 			previousDecreaseState = true;
@@ -240,8 +175,8 @@ void operatorControl() {
 		if (joystickGetDigital(JOYSTICK_SLOT, SHOOTER_BUTTON_GROUP, JOY_LEFT)) {
 			if (!previousIncreaseState && isShooterOn){
 				shooterSpeed -= SHOOTER_SPEED_INCREMENT;
-				if (shooterSpeed < MINIMUM_SHOOTER_CAP) {
-					shooterSpeed = MINIMUM_SHOOTER_CAP;
+				if (shooterSpeed < MIN_SPEED) {
+					shooterSpeed = MIN_SPEED;
 				}
 			}
 			previousIncreaseState = true;

@@ -44,47 +44,28 @@
 #define MAIN_H_
 
 #include <API.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <math.h>
 
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// TODO: remove non-global vars when code nearing completion
-// From init.c
-//extern const int8_t DRIVE_NUM_FILTER_CYCLES;// = 7;
+#define MAX_SPEED 127
+#define MIN_SPEED (-127)
 
-extern const int8_t FRONT_LEFT_MOTOR_CHANNEL;// = 2;
-extern const int8_t FRONT_RIGHT_MOTOR_CHANNEL;// = 3;
-extern const int8_t BACK_LEFT_MOTOR_CHANNEL;// = 4;
-extern const int8_t BACK_RIGHT_MOTOR_CHANNEL;// = 5;
+#define FRONT_LEFT_MOTOR_CHANNEL 2
+#define FRONT_RIGHT_MOTOR_CHANNEL 3
+#define BACK_LEFT_MOTOR_CHANNEL 4
+#define BACK_RIGHT_MOTOR_CHANNEL 5
 
-extern const int8_t FRONT_INTAKE_MOTOR_CHANNEL;// = 1;
-extern const int8_t INTERNAL_INTAKE_MOTOR_CHANNEL;// = 6;
-extern const int8_t LIFTER_MOTOR_CHANNEL;// = 7;
+#define FRONT_INTAKE_MOTOR_CHANNEL 1
+#define INTERNAL_INTAKE_MOTOR_CHANNEL 6
+#define LIFTER_MOTOR_CHANNEL 7
 
-extern const int8_t SHOOTER_MOTOR_CHANNEL;
-extern const int8_t SHOOTER_MOTOR_CHANNEL2;
-
-//extern const int8_t GYRO_PORT;// = 1;
-//extern const int8_t GYRO_MULTIPLIER;// = 0;
+#define SHOOTER_MOTOR_CHANNEL 8
+#define SHOOTER_MOTOR_CHANNEL2 9
 
 extern Gyro gyro;
-
-// From opcontrol.c
-//extern const int8_t DRIVE_AXIS;// = 3;
-//extern const int8_t STRAFE_AXIS;// = 4;
-//extern const int8_t ROTATION_AXIS;// = 1;
-//extern const int8_t DRIVE_BUTTON_GROUP;// = 7;
-
-//extern const int8_t JOYSTICK_SLOT;// = 1;
-
-//extern const int8_t WALKING_SPEED;// = 40;
-//extern const int8_t DIAGONAL_DRIVE_DEADBAND;// = 10;
 
 // A function prototype looks exactly like its declaration, but with a semicolon instead of
 // actual code. If a function does not match a prototype, compile errors will occur.
@@ -151,13 +132,7 @@ void initialize();
  *
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
-void drive(int8_t vx, int8_t vy, int8_t r, bool isFieldCentric);
 void operatorControl();
-
-// From lfilter.c
-void lfilterInit(const int8_t channel, int8_t numfCycles);
-int8_t getfSpeed(const int8_t channel, int16_t speed);
-//void lfilterClear(void);
 
 // End C++ export structure
 #ifdef __cplusplus
