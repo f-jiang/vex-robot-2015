@@ -8,7 +8,6 @@
 #ifndef TOGGLEBTN_H_
 #define TOGGLEBTN_H_
 
-#include <stdbool.h>
 #include <stdint.h>
 
 enum btnState { BTN_HELD, BTN_NOT_PRESSED, BTN_PRESSED, BTN_RELEASED, NO_STATE };

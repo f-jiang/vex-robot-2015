@@ -6,7 +6,9 @@
  */
 
 #include "togglebtn.h"
+
 #include "API.h"
+#include <stdbool.h>
 
 #define BTN_LIMIT 12
 
