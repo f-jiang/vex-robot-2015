@@ -5,11 +5,11 @@
 #define MOTOR_LIMIT 10
 #define FILTER_CYCLE_LIMIT 12
 
-int8_t ch, cy;
-int8_t data[MOTOR_LIMIT][FILTER_CYCLE_LIMIT] = { { 0 } };
-int8_t chindex[MOTOR_LIMIT] = { [0 ... MOTOR_LIMIT - 1] = -1 };
-int8_t fcycles[MOTOR_LIMIT] = { 0 };
-int8_t count = 0;
+static int8_t ch, cy;
+static int8_t data[MOTOR_LIMIT][FILTER_CYCLE_LIMIT] = { { 0 } };
+static int8_t chindex[MOTOR_LIMIT] = { [0 ... MOTOR_LIMIT - 1] = -1 };
+static int8_t fcycles[MOTOR_LIMIT] = { 0 };
+static int8_t count = 0;
 
 void lfilterInit(const int8_t channel, int8_t numfCycles) {
 	if (channel > 0 && channel <= MOTOR_LIMIT
