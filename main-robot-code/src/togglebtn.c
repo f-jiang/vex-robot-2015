@@ -10,15 +10,15 @@
 #include "API.h"
 #include <stdbool.h>
 
-#define BTN_LIMIT 12
+#define BUTTON_LIMIT 12
 
-struct toggleBtn {
+struct ToggleButton {
 	int8_t jstick, btnGroup, btn;
 	bool prevState, curState;
 };
 
-static struct toggleBtn data[BTN_LIMIT] = { { 0 } };
-static struct toggleBtn *btn;
+static struct ToggleButton data[BUTTON_LIMIT] = { { 0 } };
+static struct ToggleButton *btn;
 static int8_t count = 0;
 
 void toggleBtnInit(int8_t joystick, int8_t buttonGroup, int8_t button) {
@@ -29,20 +29,20 @@ void toggleBtnInit(int8_t joystick, int8_t buttonGroup, int8_t button) {
 	btn->prevState = btn->curState = false;
 }
 
-enum btnState toggleBtnGet(int8_t joystick, int8_t buttonGroup, int8_t button) {
-	enum btnState state = NO_STATE;
+enum ButtonState toggleBtnGet(int8_t joystick, int8_t buttonGroup, int8_t button) {
+	enum ButtonState state = NO_STATE;
 	btn = data;
 
 	for (int8_t i = 0; i < count; ++i, ++btn) {
 		if (btn->jstick == joystick && btn->btnGroup == buttonGroup && btn->btn == button) {
 			if (btn->curState && btn->prevState) {
-				state = BTN_HELD;
+				state = BUTTON_HELD;
 			} else if (btn->curState) {
-				state = BTN_PRESSED;
+				state = BUTTON_PRESSED;
 			} else if (btn->prevState) {
-				state = BTN_RELEASED;
+				state = BUTTON_RELEASED;
 			} else {
-				state = BTN_NOT_PRESSED;
+				state = BUTTON_NOT_PRESSED;
 			}
 
 			break;

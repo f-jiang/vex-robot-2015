@@ -10,11 +10,11 @@
 
 #include <stdint.h>
 
-enum btnState { BTN_HELD, BTN_NOT_PRESSED, BTN_PRESSED, BTN_RELEASED, NO_STATE };
+enum ButtonState { BUTTON_HELD, BUTTON_NOT_PRESSED, BUTTON_PRESSED, BUTTON_RELEASED, NO_STATE };
 
 void toggleBtnInit(int8_t joystick, int8_t buttonGroup, int8_t button);
 
-enum btnState toggleBtnGet(int8_t joystick, int8_t buttonGroup, int8_t button);
+enum ButtonState toggleBtnGet(int8_t joystick, int8_t buttonGroup, int8_t button);
 
 void toggleBtnUpdateAll();
 
