@@ -66,6 +66,7 @@ extern "C" {
 #define SHOOTER_MOTOR_CHANNEL2 9
 
 extern Gyro gyro;
+extern Ultrasonic ultra;
 
 // A function prototype looks exactly like its declaration, but with a semicolon instead of
 // actual code. If a function does not match a prototype, compile errors will occur.

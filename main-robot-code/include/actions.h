@@ -34,4 +34,6 @@ void shooter(int8_t sspeed);
 
 void takeInFront(int8_t speed);
 
+int8_t calculateShooterSpeed();
+
 #endif /* ACTIONS_H_ */

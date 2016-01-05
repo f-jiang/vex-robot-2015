@@ -57,7 +57,7 @@
 #define INTAKE_SPEED 127
 #define LIFTER_SPEED 60
 
-#define DEFAULT_SHOOTER_SPEED 127
+#define DEFAULT_SHOOTER_SPEED 80
 #define SHOOTER_SPEED_INCREMENT 10
 
 /*
@@ -85,11 +85,13 @@ void operatorControl() {
 	int8_t frontIntakeSpeed = INTAKE_SPEED;
 	bool isShooterOn = true;
 	bool isFrontIntakeOn = true;
+	bool isAutoShootOn = false;
 
 	//lfilterClear();
 
 	toggleBtnInit(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_LEFT);	// intake on off
 	toggleBtnInit(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_DOWN);   // shooter on off
+	toggleBtnInit(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_RIGHT);   // auto shoot on off
 	toggleBtnInit(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_UP);   // shooter speed up
 	toggleBtnInit(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_DOWN);   // shooter speed down
 
@@ -141,26 +143,37 @@ void operatorControl() {
 		lifter(lifterSpeed);
 		takeInInternal(lifterSpeed);
 
-		// shooter on button
+
+		if (isShooterOn) {
+			if (isAutoShootOn) {
+				shooterSpeed = calculateShooterSpeed();
+			} else {
+				// shooter increase speed
+				if (toggleBtnGet(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_UP) == BUTTON_PRESSED) {
+					shooterSpeed += SHOOTER_SPEED_INCREMENT;
+					if (shooterSpeed > MAX_SPEED) {
+						shooterSpeed = MAX_SPEED;
+					}
+				}
+
+				// shooter decrease speed
+				if (toggleBtnGet(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_DOWN) == BUTTON_PRESSED) {
+					shooterSpeed -= SHOOTER_SPEED_INCREMENT;
+					if (shooterSpeed < MIN_SPEED) {
+						shooterSpeed = MIN_SPEED;
+					}
+				}
+			}
+
+			if (toggleBtnGet(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_RIGHT) == BUTTON_PRESSED) {
+				isAutoShootOn = !isAutoShootOn;
+			}
+		}
+
+		// shooter on off
 		if (toggleBtnGet(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_DOWN) == BUTTON_PRESSED) {
 			isShooterOn = !isShooterOn;
 			shooterSpeed = isShooterOn ? DEFAULT_SHOOTER_SPEED : 0;
-		}
-
-		// shooter increase speed
-		if (toggleBtnGet(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_UP) == BUTTON_PRESSED && isShooterOn) {
-			shooterSpeed += SHOOTER_SPEED_INCREMENT;
-			if (shooterSpeed > MAX_SPEED) {
-				shooterSpeed = MAX_SPEED;
-			}
-		}
-
-		// shooter decrease speed
-		if (toggleBtnGet(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_DOWN) == BUTTON_PRESSED && isShooterOn) {
-			shooterSpeed -= SHOOTER_SPEED_INCREMENT;
-			if (shooterSpeed < MIN_SPEED) {
-				shooterSpeed = MIN_SPEED;
-			}
 		}
 
 		shooter(shooterSpeed);

@@ -43,8 +43,11 @@
 
 #define GYRO_PORT 1
 #define GYRO_MULTIPLIER 0
+#define ULTRASONIC_ECHO_PORT 0	// TODO: remove placeholders
+#define ULTRASONIC_PING_PORT 1  // TODO: remove placeholders
 
 Gyro gyro;
+Ultrasonic ultra;
 
 /*
  * Runs pre-initialization code. This function will be started in kernel mode one time while the
@@ -72,6 +75,7 @@ void initializeIO() {
  */
 void initialize() {
 	gyro = gyroInit(GYRO_PORT, GYRO_MULTIPLIER);
+	ultra = ultrasonicInit(ULTRASONIC_ECHO_PORT, ULTRASONIC_PING_PORT);
 
 	lfilterInit(FRONT_LEFT_MOTOR_CHANNEL, DRIVE_NUM_FILTER_CYCLES);
 	lfilterInit(FRONT_RIGHT_MOTOR_CHANNEL, DRIVE_NUM_FILTER_CYCLES);

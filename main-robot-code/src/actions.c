@@ -73,3 +73,16 @@ void takeInFront(int8_t speed) {
 	int8_t fspeed = getfSpeed(FRONT_INTAKE_MOTOR_CHANNEL, -speed);
 	motorSet(FRONT_INTAKE_MOTOR_CHANNEL, fspeed);
 }
+
+int8_t calculateShooterSpeed() {
+	float dist = (float) ultrasonicGet(ultra) / 2.54;
+	float speed = 1.11 * dist - 1.6;
+
+	if (speed > MAX_SPEED) {
+		speed = MAX_SPEED;
+	} else if (speed < 0) {
+		speed = 0;
+	}
+
+	return (int8_t) speed;
+}
