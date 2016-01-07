@@ -60,6 +60,9 @@
 #define DEFAULT_SHOOTER_SPEED 80
 #define SHOOTER_SPEED_INCREMENT 10
 
+#define SHOOTER_MAX_SPEED MAX_SPEED
+#define SHOOTER_MIN_SPEED 0
+
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via the Field Management System
@@ -96,10 +99,7 @@ void operatorControl() {
 	toggleBtnInit(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_DOWN);   // shooter speed down
 
 	while (true) {
-		printf("ultra distance (cm): %d\r", ultrasonicGet(ultra));	// TODO: remove after testing
-		printf("ultra distance (m): %f\r", ultrasonicGet(ultra) / 100.0);
-		printf("ultra distance (in): %f\r", ultrasonicGet(ultra) / 2.54);
-		printf("ultra distance (ft): %f\r", ultrasonicGet(ultra) / (2.54 * 12));
+		printf("ultra distance (in): %f\r\n", ultrasonicGet(ultra) / 2.54);
 
 		xSpeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, STRAFE_AXIS);
 		ySpeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, DRIVE_AXIS);
@@ -156,16 +156,16 @@ void operatorControl() {
 				// shooter increase speed
 				if (toggleBtnGet(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_UP) == BUTTON_PRESSED) {
 					shooterSpeed += SHOOTER_SPEED_INCREMENT;
-					if (shooterSpeed > MAX_SPEED) {
-						shooterSpeed = MAX_SPEED;
+					if (shooterSpeed > SHOOTER_MAX_SPEED) {
+						shooterSpeed = SHOOTER_MAX_SPEED;
 					}
 				}
 
 				// shooter decrease speed
 				if (toggleBtnGet(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_DOWN) == BUTTON_PRESSED) {
 					shooterSpeed -= SHOOTER_SPEED_INCREMENT;
-					if (shooterSpeed < MIN_SPEED) {
-						shooterSpeed = MIN_SPEED;
+					if (shooterSpeed < SHOOTER_MIN_SPEED) {
+						shooterSpeed = SHOOTER_MIN_SPEED;
 					}
 				}
 			}

@@ -43,7 +43,7 @@
 
 #define GYRO_PORT 1
 #define GYRO_MULTIPLIER 0
-#define ULTRASONIC_ECHO_PORT 0	// TODO: remove placeholders
+#define ULTRASONIC_ECHO_PORT 2	// TODO: remove placeholders
 #define ULTRASONIC_PING_PORT 1  // TODO: remove placeholders
 
 Gyro gyro;
