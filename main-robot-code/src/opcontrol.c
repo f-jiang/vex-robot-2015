@@ -96,6 +96,11 @@ void operatorControl() {
 	toggleBtnInit(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_DOWN);   // shooter speed down
 
 	while (true) {
+		printf("ultra distance (cm): %d\r", ultrasonicGet(ultra));	// TODO: remove after testing
+		printf("ultra distance (m): %f\r", ultrasonicGet(ultra) / 100.0);
+		printf("ultra distance (in): %f\r", ultrasonicGet(ultra) / 2.54);
+		printf("ultra distance (ft): %f\r", ultrasonicGet(ultra) / (2.54 * 12));
+
 		xSpeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, STRAFE_AXIS);
 		ySpeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, DRIVE_AXIS);
 		rotation = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS) / 2;

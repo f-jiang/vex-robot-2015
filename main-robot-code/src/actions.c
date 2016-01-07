@@ -75,7 +75,7 @@ void takeInFront(int8_t speed) {
 }
 
 int8_t calculateShooterSpeed() {
-	float dist = (float) ultrasonicGet(ultra) / 2.54;
+	float dist = ultrasonicGet(ultra) / 2.54;
 	float speed = 1.11 * dist - 1.6;
 
 	if (speed > MAX_SPEED) {
