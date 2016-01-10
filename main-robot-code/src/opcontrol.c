@@ -63,6 +63,8 @@
 #define SHOOTER_MAX_SPEED MAX_SPEED
 #define SHOOTER_MIN_SPEED 0
 
+#define NUM_SHOOTER_INDICATORS 3
+
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via the Field Management System
@@ -89,6 +91,12 @@ void operatorControl() {
 	bool isShooterOn = true;
 	bool isFrontIntakeOn = true;
 	bool isAutoShootOn = false;
+
+	int8_t shooterIndicatorChannel[NUM_SHOOTER_INDICATORS] = { 6, 7, 9 };
+	int8_t indicatorInterval = (SHOOTER_MAX_SPEED - SHOOTER_MIN_SPEED) / NUM_SHOOTER_INDICATORS;
+	int8_t i = 0;
+
+	int8_t autoShootIndicatorChannel = 10;
 
 	//lfilterClear();
 
@@ -190,6 +198,14 @@ void operatorControl() {
 		}
 
 		takeInFront(frontIntakeSpeed);
+
+		// set shooter speed indicators
+		for (i = 0; i < NUM_SHOOTER_INDICATORS; ++i) {
+			digitalWrite(shooterIndicatorChannel[i], i * indicatorInterval < shooterSpeed);
+		}
+
+		// set auto shoot indicator
+		digitalWrite(autoShootIndicatorChannel, isAutoShootOn);
 
 		delay(20);
 	}
