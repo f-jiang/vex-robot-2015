@@ -34,6 +34,9 @@
 
 #include "main.h"
 
+#include <stdbool.h>
+#include "actions.h"
+
 /*
  * Runs the user autonomous code. This function will be started in its own task with the default
  * priority and stack size whenever the robot is enabled via the Field Management System or the
@@ -50,4 +53,11 @@
  */
 void autonomous() {
 	//lfilterClear();
+	while (true) {
+		if (motorGet(SHOOTER_MOTOR_CHANNEL) == MAX_SPEED && motorGet(SHOOTER_MOTOR_CHANNEL2) == MAX_SPEED) {
+			lifter(30);
+		}
+		shooter(MAX_SPEED);
+		delay(20);
+	}
 }
