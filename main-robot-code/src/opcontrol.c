@@ -63,7 +63,7 @@
 #define SHOOTER_MAX_SPEED MAX_SPEED
 #define SHOOTER_MIN_SPEED 0
 
-#define AUTO
+//#define AUTO
 
 /*
  * Runs the user operator control code. This function will be started in its own task with the
