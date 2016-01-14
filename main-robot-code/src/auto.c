@@ -61,6 +61,7 @@ void autonomous() {
 				++n;
 			} else {
 				lifter(30);
+				takeInInternal(30);
 			}
 		}
 		shooter(MAX_SPEED);
