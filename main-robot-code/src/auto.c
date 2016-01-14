@@ -35,6 +35,7 @@
 #include "main.h"
 
 #include <stdbool.h>
+#include <math.h>
 #include "actions.h"
 
 /*
@@ -53,9 +54,14 @@
  */
 void autonomous() {
 	//lfilterClear();
+	int8_t n = 0;
 	while (true) {
-		if (motorGet(SHOOTER_MOTOR_CHANNEL) == MAX_SPEED && motorGet(SHOOTER_MOTOR_CHANNEL2) == MAX_SPEED) {
-			lifter(30);
+		if (abs(motorGet(SHOOTER_MOTOR_CHANNEL)) == MAX_SPEED && abs(motorGet(SHOOTER_MOTOR_CHANNEL2)) == MAX_SPEED) {
+			if (n < 25) {
+				++n;
+			} else {
+				lifter(30);
+			}
 		}
 		shooter(MAX_SPEED);
 		delay(20);

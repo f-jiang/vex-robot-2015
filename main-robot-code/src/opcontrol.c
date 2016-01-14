@@ -63,6 +63,8 @@
 #define SHOOTER_MAX_SPEED MAX_SPEED
 #define SHOOTER_MIN_SPEED 0
 
+#define AUTO
+
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via the Field Management System
@@ -81,6 +83,9 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl() {
+#ifdef AUTO
+	autonomous();
+#else
 	int8_t xSpeed, ySpeed, rotation;
 	int8_t lifterSpeed/*, intakeSpeed*/;
 
@@ -193,4 +198,5 @@ void operatorControl() {
 
 		delay(20);
 	}
+#endif
 }
