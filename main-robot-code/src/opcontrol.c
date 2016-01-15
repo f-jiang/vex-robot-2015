@@ -45,7 +45,7 @@
 #define STRAFE_AXIS 4
 #define ROTATION_AXIS 1
 
-#define DRIVE_BUTTON_GROUP 7
+#define INTAKE_BUTTON_GROUP 7
 #define CONTROL_BUTTON_GROUP 8
 #define LIFTER_BUTTON_GROUP 5
 #define SHOOTER_ADJUST_BUTTON_GROUP 6
@@ -92,12 +92,14 @@ void operatorControl() {
 	int16_t shooterSpeed = DEFAULT_SHOOTER_SPEED;	//shooter is on when robot starts
 	int8_t frontIntakeSpeed = INTAKE_SPEED;
 	bool isShooterOn = true;
-	bool isFrontIntakeOn = true;
 	bool isAutoShootOn = false;
 
 	//lfilterClear();
 
-	toggleBtnInit(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_LEFT);	// intake on off
+	toggleBtnInit(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_UP);		// intake forward
+	toggleBtnInit(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_LEFT);	// intake off
+	toggleBtnInit(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_RIGHT);	// intake off
+	toggleBtnInit(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_DOWN);	// intake backward
 	toggleBtnInit(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_DOWN);   // shooter on off
 	toggleBtnInit(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_RIGHT);   // auto shoot on off
 	toggleBtnInit(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_UP);   // shooter speed up
@@ -106,38 +108,18 @@ void operatorControl() {
 	while (true) {
 		printf("ultra distance (in): %f\r\n", ultrasonicGet(ultra) / 2.54);
 
+		toggleBtnUpdateAll();
+
 		xSpeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, STRAFE_AXIS);
 		ySpeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, DRIVE_AXIS);
 		rotation = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS) / 2;
 
-		toggleBtnUpdateAll();
+		if (abs(ySpeed) < DIAGONAL_DRIVE_DEADBAND) {
+			ySpeed = 0;
+		}
 
-		// Uses button-based drive controls if joysticks aren't being used
-		if (abs(xSpeed) < MOVEMENT_DEADBAND && abs(ySpeed) < MOVEMENT_DEADBAND &&
-				abs(rotation) < MOVEMENT_DEADBAND) {
-			//TODO: adjust WALKING_SPEED signs as necessary
-			//TODO: adjust WALKING_SPEED value as necessary
-			if (joystickGetDigital(JOYSTICK_SLOT, DRIVE_BUTTON_GROUP, JOY_UP)) {
-				ySpeed = WALKING_SPEED;
-			} else if (joystickGetDigital(JOYSTICK_SLOT, DRIVE_BUTTON_GROUP, JOY_DOWN)) {
-				ySpeed = -WALKING_SPEED;
-			}
-
-			if (joystickGetDigital(JOYSTICK_SLOT, DRIVE_BUTTON_GROUP, JOY_LEFT)) {
-				xSpeed = -WALKING_SPEED;
-			} else if (joystickGetDigital(JOYSTICK_SLOT, DRIVE_BUTTON_GROUP, JOY_RIGHT)) {
-				xSpeed = WALKING_SPEED;
-			}
-			// To allow for straight movement, xspeed and yspeed are set to 0 if their values are
-			// negligibly small.
-		} else {
-			if (abs(ySpeed) < DIAGONAL_DRIVE_DEADBAND) {
-				ySpeed = 0;
-			}
-
-			if (abs(xSpeed) < DIAGONAL_DRIVE_DEADBAND) {
-				xSpeed = 0;
-			}
+		if (abs(xSpeed) < DIAGONAL_DRIVE_DEADBAND) {
+			xSpeed = 0;
 		}
 
 		drive(xSpeed, ySpeed, rotation, false);
@@ -152,7 +134,6 @@ void operatorControl() {
 
 		lifter(lifterSpeed);
 		takeInInternal(lifterSpeed);
-
 
 		if (isShooterOn) {
 			if (isAutoShootOn) {
@@ -188,10 +169,13 @@ void operatorControl() {
 
 		shooter(shooterSpeed);
 
-		// front intake on/off
-		if (toggleBtnGet(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_LEFT) == BUTTON_PRESSED) {
-			isFrontIntakeOn = !isFrontIntakeOn;
-			frontIntakeSpeed = isFrontIntakeOn ? INTAKE_SPEED : 0;
+		if (toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_LEFT) == BUTTON_PRESSED
+			|| toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_RIGHT) == BUTTON_PRESSED) {
+			frontIntakeSpeed = 0;
+		} else if (toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_UP) == BUTTON_PRESSED) {
+			frontIntakeSpeed = INTAKE_SPEED;
+		} else if (toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_DOWN) == BUTTON_PRESSED) {
+			frontIntakeSpeed = -INTAKE_SPEED;
 		}
 
 		takeInFront(frontIntakeSpeed);
