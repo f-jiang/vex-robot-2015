@@ -54,9 +54,11 @@
  */
 void autonomous() {
 	//lfilterClear();
+	int8_t shooterSpeed = shooterSpeedPresets[2];
 	int8_t n = 0;
+
 	while (true) {
-		if (abs(motorGet(SHOOTER_MOTOR_CHANNEL)) == MAX_SPEED && abs(motorGet(SHOOTER_MOTOR_CHANNEL2)) == MAX_SPEED) {
+		if (abs(motorGet(SHOOTER_MOTOR_CHANNEL)) == shooterSpeed && abs(motorGet(SHOOTER_MOTOR_CHANNEL2)) == shooterSpeed) {
 			if (n < 25) {
 				++n;
 			} else {
@@ -64,7 +66,7 @@ void autonomous() {
 				takeInInternal(30);
 			}
 		}
-		shooter(MAX_SPEED);
+		shooter(shooterSpeed);
 		delay(20);
 	}
 }

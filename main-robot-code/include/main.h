@@ -44,6 +44,7 @@
 #define MAIN_H_
 
 #include <API.h>
+#include <stdint.h>
 
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
@@ -65,15 +66,18 @@ extern "C" {
 #define SHOOTER_MOTOR_CHANNEL 8
 #define SHOOTER_MOTOR_CHANNEL2 9
 
+#define NUM_SHOOTER_SPEED_PRESETS 3
+
 extern Gyro gyro;
 extern Ultrasonic ultra;
+
+extern const int8_t shooterSpeedPresets[NUM_SHOOTER_SPEED_PRESETS];
 
 // A function prototype looks exactly like its declaration, but with a semicolon instead of
 // actual code. If a function does not match a prototype, compile errors will occur.
 
 // Prototypes for initialization, operator control and autonomous
 
-// From auto.c
 /**
  * Runs the user autonomous code. This function will be started in its own task with the default
  * priority and stack size whenever the robot is enabled via the Field Management System or the
@@ -90,7 +94,6 @@ extern Ultrasonic ultra;
  */
 void autonomous();
 
-// From init.c
 /**
  * Runs pre-initialization code. This function will be started in kernel mode one time while the
  * VEX Cortex is starting up. As the scheduler is still paused, most API functions will fail.
@@ -115,7 +118,6 @@ void initializeIO();
  */
 void initialize();
 
-// From opcontrol.c
 /**
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via the Field Management System

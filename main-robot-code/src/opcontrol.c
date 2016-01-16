@@ -50,20 +50,16 @@
 #define LIFTER_BUTTON_GROUP 5
 #define SHOOTER_ADJUST_BUTTON_GROUP 6
 
-#define WALKING_SPEED 40
 #define DIAGONAL_DRIVE_DEADBAND 30
-#define MOVEMENT_DEADBAND 30
 
 #define INTAKE_SPEED 127
 #define LIFTER_SPEED 60
-
-#define DEFAULT_SHOOTER_SPEED 80
-#define SHOOTER_SPEED_INCREMENT 10
 
 #define SHOOTER_MAX_SPEED MAX_SPEED
 #define SHOOTER_MIN_SPEED 0
 
 //#define AUTO
+//#define TEST
 
 /*
  * Runs the user operator control code. This function will be started in its own task with the
@@ -85,11 +81,15 @@
 void operatorControl() {
 #ifdef AUTO
 	autonomous();
-#else
+#elif defined(TEST)
+
+#define DEFAULT_SHOOTER_SPEED 0
+#define SHOOTER_SPEED_INCREMENT 5
+
 	int8_t xSpeed, ySpeed, rotation;
 	int8_t lifterSpeed/*, intakeSpeed*/;
 
-	int16_t shooterSpeed = DEFAULT_SHOOTER_SPEED;	//shooter is on when robot starts
+	int16_t shooterSpeed = DEFAULT_SHOOTER_SPEED; //shooter is on when robot starts
 	int8_t frontIntakeSpeed = INTAKE_SPEED;
 	bool isShooterOn = true;
 	bool isAutoShootOn = false;
@@ -110,6 +110,7 @@ void operatorControl() {
 
 		toggleBtnUpdateAll();
 
+		// drive
 		xSpeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, STRAFE_AXIS);
 		ySpeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, DRIVE_AXIS);
 		rotation = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS) / 2;
@@ -124,6 +125,7 @@ void operatorControl() {
 
 		drive(xSpeed, ySpeed, rotation, false);
 
+		// lifter up down
 		if (joystickGetDigital(JOYSTICK_SLOT, LIFTER_BUTTON_GROUP, JOY_UP)) {
 			lifterSpeed = LIFTER_SPEED;
 		} else if (joystickGetDigital(JOYSTICK_SLOT, LIFTER_BUTTON_GROUP, JOY_DOWN)) {
@@ -142,6 +144,7 @@ void operatorControl() {
 				// shooter increase speed
 				if (toggleBtnGet(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_UP) == BUTTON_PRESSED) {
 					shooterSpeed += SHOOTER_SPEED_INCREMENT;
+
 					if (shooterSpeed > SHOOTER_MAX_SPEED) {
 						shooterSpeed = SHOOTER_MAX_SPEED;
 					}
@@ -150,12 +153,14 @@ void operatorControl() {
 				// shooter decrease speed
 				if (toggleBtnGet(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_DOWN) == BUTTON_PRESSED) {
 					shooterSpeed -= SHOOTER_SPEED_INCREMENT;
+
 					if (shooterSpeed < SHOOTER_MIN_SPEED) {
 						shooterSpeed = SHOOTER_MIN_SPEED;
 					}
 				}
 			}
 
+//			 auto shooter on off
 			if (toggleBtnGet(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_RIGHT) == BUTTON_PRESSED) {
 				isAutoShootOn = !isAutoShootOn;
 			}
@@ -169,13 +174,111 @@ void operatorControl() {
 
 		shooter(shooterSpeed);
 
+		// intake mode
 		if (toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_LEFT) == BUTTON_PRESSED
 			|| toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_RIGHT) == BUTTON_PRESSED) {
 			frontIntakeSpeed = 0;
 		} else if (toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_UP) == BUTTON_PRESSED) {
-			frontIntakeSpeed = INTAKE_SPEED;
-		} else if (toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_DOWN) == BUTTON_PRESSED) {
 			frontIntakeSpeed = -INTAKE_SPEED;
+		} else if (toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_DOWN) == BUTTON_PRESSED) {
+			frontIntakeSpeed = INTAKE_SPEED;
+		}
+
+		takeInFront(frontIntakeSpeed);
+
+		delay(20);
+	}
+#else
+	int8_t xSpeed, ySpeed, rotation;
+	int8_t lifterSpeed/*, intakeSpeed*/;
+	int8_t defaultPreset = 2;
+	int8_t currentPreset = defaultPreset;
+
+	int16_t shooterSpeed = shooterSpeedPresets[defaultPreset]; //shooter is on when robot starts
+	int8_t frontIntakeSpeed = INTAKE_SPEED;
+	bool isShooterOn = true;
+
+	//lfilterClear();
+
+	toggleBtnInit(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_UP);		// intake forward
+	toggleBtnInit(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_LEFT);	// intake off
+	toggleBtnInit(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_RIGHT);	// intake off
+	toggleBtnInit(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_DOWN);	// intake backward
+	toggleBtnInit(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_DOWN);   // shooter on off
+	toggleBtnInit(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_RIGHT);   // auto shoot on off
+	toggleBtnInit(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_UP);   // shooter speed up
+	toggleBtnInit(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_DOWN);   // shooter speed down
+
+	while (true) {
+		printf("ultra distance (in): %f\r\n", ultrasonicGet(ultra) / 2.54);
+
+		toggleBtnUpdateAll();
+
+		// drive
+		xSpeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, STRAFE_AXIS);
+		ySpeed = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, DRIVE_AXIS);
+		rotation = (int8_t) joystickGetAnalog(JOYSTICK_SLOT, ROTATION_AXIS) / 2;
+
+		if (abs(ySpeed) < DIAGONAL_DRIVE_DEADBAND) {
+			ySpeed = 0;
+		}
+
+		if (abs(xSpeed) < DIAGONAL_DRIVE_DEADBAND) {
+			xSpeed = 0;
+		}
+
+		drive(xSpeed, ySpeed, rotation, false);
+
+		// lifter up down
+		if (joystickGetDigital(JOYSTICK_SLOT, LIFTER_BUTTON_GROUP, JOY_UP)) {
+			lifterSpeed = LIFTER_SPEED;
+		} else if (joystickGetDigital(JOYSTICK_SLOT, LIFTER_BUTTON_GROUP, JOY_DOWN)) {
+			lifterSpeed = -LIFTER_SPEED;
+		} else {
+			lifterSpeed = 0;
+		}
+
+		lifter(lifterSpeed);
+		takeInInternal(lifterSpeed);
+
+		if (isShooterOn) {
+			// shooter increase speed
+			if (toggleBtnGet(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_UP) == BUTTON_PRESSED) {
+				++currentPreset;
+
+				if (currentPreset >= NUM_SHOOTER_SPEED_PRESETS) {
+					currentPreset = NUM_SHOOTER_SPEED_PRESETS - 1;
+				}
+			}
+
+			// shooter decrease speed
+			if (toggleBtnGet(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_DOWN) == BUTTON_PRESSED) {
+				--currentPreset;
+
+				if (currentPreset < 0) {
+					currentPreset = 0;
+				}
+			}
+
+			shooterSpeed = shooterSpeedPresets[currentPreset];
+		}
+
+		// shooter on off
+		if (toggleBtnGet(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_DOWN) == BUTTON_PRESSED) {
+			isShooterOn = !isShooterOn;
+			shooterSpeed = isShooterOn ? shooterSpeedPresets[defaultPreset] : 0;
+		}
+
+		shooter(shooterSpeed);
+
+		// intake mode
+		if (toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_LEFT) == BUTTON_PRESSED
+			|| toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_RIGHT) == BUTTON_PRESSED) {
+			frontIntakeSpeed = 0;
+		} else if (toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_UP) == BUTTON_PRESSED) {
+			frontIntakeSpeed = -INTAKE_SPEED;
+		} else if (toggleBtnGet(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_DOWN) == BUTTON_PRESSED) {
+			frontIntakeSpeed = INTAKE_SPEED;
 		}
 
 		takeInFront(frontIntakeSpeed);
