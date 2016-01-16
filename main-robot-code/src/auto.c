@@ -59,11 +59,11 @@ void autonomous() {
 
 	while (true) {
 		if (abs(motorGet(SHOOTER_MOTOR_CHANNEL)) == shooterSpeed && abs(motorGet(SHOOTER_MOTOR_CHANNEL2)) == shooterSpeed) {
-			if (n < 25) {
+			if (n < 75) {
 				++n;
 			} else {
-				lifter(30);
-				takeInInternal(30);
+				lifter(60);
+				takeInInternal(60);
 			}
 		}
 		shooter(shooterSpeed);

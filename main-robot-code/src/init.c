@@ -49,7 +49,7 @@
 Gyro gyro;
 Ultrasonic ultra;
 
-const int8_t shooterSpeedPresets[NUM_SHOOTER_SPEED_PRESETS] = { 50, 60, 83 };
+int8_t shooterSpeedPresets[NUM_SHOOTER_SPEED_PRESETS] = { 45, 55, 75 };
 
 /*
  * Runs pre-initialization code. This function will be started in kernel mode one time while the

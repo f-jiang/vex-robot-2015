@@ -191,7 +191,7 @@ void operatorControl() {
 #else
 	int8_t xSpeed, ySpeed, rotation;
 	int8_t lifterSpeed/*, intakeSpeed*/;
-	int8_t defaultPreset = 2;
+	int8_t defaultPreset = 0;
 	int8_t currentPreset = defaultPreset;
 
 	int16_t shooterSpeed = shooterSpeedPresets[defaultPreset]; //shooter is on when robot starts
@@ -205,7 +205,6 @@ void operatorControl() {
 	toggleBtnInit(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_RIGHT);	// intake off
 	toggleBtnInit(JOYSTICK_SLOT, INTAKE_BUTTON_GROUP, JOY_DOWN);	// intake backward
 	toggleBtnInit(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_DOWN);   // shooter on off
-	toggleBtnInit(JOYSTICK_SLOT, CONTROL_BUTTON_GROUP, JOY_RIGHT);   // auto shoot on off
 	toggleBtnInit(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_UP);   // shooter speed up
 	toggleBtnInit(JOYSTICK_SLOT, SHOOTER_ADJUST_BUTTON_GROUP, JOY_DOWN);   // shooter speed down
 
