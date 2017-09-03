@@ -20,4 +20,4 @@ distance shots simply by adjusting the power delivered to the wheels. Although t
 the holonomic drive to be quite good at navigating tight spaces where sudden changes in direction were frequent and necessary.
 
 The robot code is based on a loop in which we listen to controller input and perform the corresponding robot action. A scalable slew rate
-controller was implemented in order to reduce gear wear. Also, the shooting distance can be adjusted manually or assigned to a number of commonly used presets. 
+controller was implemented in order to reduce gear wear. Also, the shooting distance can be adjusted manually or assigned to a number of commonly used presets. The code is powered by the [PROS Kernel for the VEX Cortex Microcontroller](https://github.com/purduesigbots/pros) rather than the more common RobotC.
