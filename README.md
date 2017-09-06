@@ -1,6 +1,6 @@
 # VEX 2015 Robot - Nothing But Net
 
-Here is the code wriiten for our VEX competition robot. The VEX robotics competition is a high school-level engineering challenge designed to foster
+Here is the code written for our VEX competition robot. The VEX robotics competition is a high school-level engineering challenge designed to foster
 learning, teamwork, and an interest in STEM. 
 
 ## The Game
@@ -14,7 +14,7 @@ At the beginning of each match, shooting is done autonomously, and the team with
 
 <img src="https://raw.githubusercontent.com/f-jiang/vex-robot-2015/master/images/robot.jpg" width="400">
 
-Our goal was to create a robot that was manuverable and could make accurate shots from any range. Thus we decided to use a holonomic x-drive,
+Our goal was to create a robot that was maneuverable and could make accurate shots from any range. Thus we decided to use a holonomic x-drive,
 which allowed the robot to freely move and turn in any direction. Using flywheels for the ball launcher enabled us to make both long and short
 distance shots simply by adjusting the power delivered to the wheels. Although the drivetrain controls were counterintuitive at first, we found
 the holonomic drive to be quite good at navigating tight spaces where sudden changes in direction were frequent and necessary.
